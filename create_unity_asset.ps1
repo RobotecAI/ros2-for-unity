@@ -17,7 +17,7 @@ Param (
     [Parameter(Mandatory=$true)][string]$unity_path,
     [Parameter(Mandatory=$false)][string]$input_asset,
     [Parameter(Mandatory=$false)][string]$package_name="Ros2ForUnity",
-    [Parameter(Mandatory=$true)][string]$output_dir
+    [Parameter(Mandatory=$false)][string]$output_dir
 )
 
 $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
@@ -27,9 +27,12 @@ if(-Not $PSBoundParameters.ContainsKey('input_asset')) {
     $input_asset= Join-Path -Path $scriptPath -ChildPath "\src\Ros2ForUnity"
 }
 
+if(-Not $PSBoundParameters.ContainsKey('output_dir')) {
+    $output_dir= Join-Path -Path $scriptPath -ChildPath "\install\unity_package"
+}
+
 if(-Not (Test-Path -Path "$output_dir")) {
-    Write-Host "Output dir doesn't exist!" -ForegroundColor red
-    exit 1
+    mkdir ${output_dir} | Out-Null
 }
 
 & "$unity_path" -version | Tee-Object -Variable unity_version | Out-Null
