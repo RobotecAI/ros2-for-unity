@@ -27,7 +27,7 @@ namespace ROS2
 internal class ROS2ForUnity
 {
     private static bool isInitialized = false;
-    private static string ros2ForUnityAssetFolderName = "ROS2";
+    private static string ros2ForUnityAssetFolderName = "Ros2ForUnity";
 
     enum Platform
     {
