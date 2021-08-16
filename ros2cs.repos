@@ -1,0 +1,5 @@
+repositories:
+  src/ros2cs/:
+    type: git
+    url: https://gitlab.com/robotec.ai/demos/tieriv/ros2cs.git
+    version: ros2_for_unity_version
