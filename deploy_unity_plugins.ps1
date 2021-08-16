@@ -6,7 +6,7 @@ function Print-Help {
 Usage: 
 deploy_unity_plugins.ps1 <PLUGINS_DIR>
 
-PLUGINS_DIR - Assets/ROS2/Plugins/ directory of Unity project.
+PLUGINS_DIR - Ros2ForUnity/Plugins.
 "
 }
 
