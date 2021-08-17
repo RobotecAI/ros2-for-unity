@@ -132,24 +132,6 @@ internal class ROS2ForUnity
         Environment.SetEnvironmentVariable(GetEnvPathVariableName(), pluginPath + envPathSep + currentPath);
     }
 
-    private void EnsureROS2PluginVisibility()
-    {  
-        string pluginPath = GetPluginPath();
-        string currentEnvironmentPath = GetEnvPathVariableValue();
-
-        if (string.IsNullOrEmpty(currentEnvironmentPath) || !currentEnvironmentPath.Contains(pluginPath))
-        {
-            Debug.LogError("environment variables do not contain required settings (variable value | expected): " + currentEnvironmentPath + " | " + pluginPath);
-#if UNITY_EDITOR
-            EditorApplication.isPlaying = false;
-            throw new System.InvalidOperationException("Missing library path to plugins in environment. Make sure you launch with the start app/editor script ");
-#else
-            const int LD_LIBRARY_PATH_ENTRY_MISSING = 32;
-            Application.Quit(LD_LIBRARY_PATH_ENTRY_MISSING);
-#endif
-        }
-    }
-
     /// <summary>
     /// Check if the ros version is supported, only applicable to non-standalone plugin versions
     /// (i. e. without ros2 libraries included in the plugin).
@@ -157,10 +139,11 @@ internal class ROS2ForUnity
     private void CheckROSVersionSourced()
     {
         string currentVersion = Environment.GetEnvironmentVariable("ROS_DISTRO");
-        const string supportedVersion = "foxy";
+        List<string> supportedVersions = new List<string>() { "foxy", "galactic" };
+        var supportedVersionsString = String.Join(", ", supportedVersions);
         if (string.IsNullOrEmpty(currentVersion))
         {
-            string errMessage = "No ROS environment sourced. You need to source your ROS2 " + supportedVersion
+            string errMessage = "No ROS environment sourced. You need to source your ROS2 " + supportedVersionsString
               + " environment before launching Unity. Make sure you launch with the start app/editor script";
             Debug.LogError(errMessage);
 #if UNITY_EDITOR
@@ -172,10 +155,10 @@ internal class ROS2ForUnity
 #endif
         }
 
-        if (currentVersion != supportedVersion)
+        if (!supportedVersions.Contains(currentVersion))
         {
             string errMessage = "Currently sourced ROS version differs from supported one. Sourced: " + currentVersion
-              + ", supported: " + supportedVersion;
+              + ", supported: " + supportedVersionsString + ".";
             Debug.LogError(errMessage);
 #if UNITY_EDITOR
             EditorApplication.isPlaying = false;
@@ -185,7 +168,7 @@ internal class ROS2ForUnity
             Application.Quit(ROS_BAD_VERSION_CODE);
 #endif
         }
-        Debug.Log("Running with a supported ROS 2 version: " + supportedVersion);
+        Debug.Log("Running with a supported ROS 2 version: " + currentVersion);
     }
 
     private void RegisterCtrlCHandler()
@@ -210,13 +193,17 @@ internal class ROS2ForUnity
 
     internal ROS2ForUnity()
     {
+        // TODO: Find a way to determine whether we run standalone build
         if (GetOS() == Platform.Windows) {
+            // Windows version can run standalone, modifies PATH to ensure all plugins visibility
             SetEnvPathVariable();
         } else {
-            EnsureROS2PluginVisibility();
+            // Linux version needs to have ros2 sourced, which is checked here. It also loads plugins by absolute path
+            // since LD_LIBRARY_PATH cannot be set dynamically within the process for dlopen() which is used under the hood.
+            // Since libraries are built with -rpath=".", dependencies will be correcly located within plugins directory
+            CheckROSVersionSourced();
+            ROS2.GlobalVariables.absolutePath = GetPluginPath() + "/";
         }
-        // TODO: Find a way to determine whether we run standalone build
-        //CheckROSVersionSourced();
         ConnectLoggers();
         Ros2cs.Init();
         RegisterCtrlCHandler();

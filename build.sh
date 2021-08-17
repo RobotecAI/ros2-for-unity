@@ -23,4 +23,4 @@ fi
 
 echo $MSG
 #TODO - call ros2cs ./build.sh instead, but with this workspace directory (parametrize the script)
-colcon build --merge-install --event-handlers console_direct+ --cmake-args -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=$TESTS && $SCRIPTPATH/deploy_unity_plugins.sh $SCRIPTPATH/src/Ros2ForUnity/Plugins/
+colcon build --merge-install --event-handlers console_direct+ --cmake-args -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=$TESTS -DCMAKE_SHARED_LINKER_FLAGS="-Wl,-rpath=." && $SCRIPTPATH/deploy_unity_plugins.sh $SCRIPTPATH/src/Ros2ForUnity/Plugins/
