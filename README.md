@@ -20,14 +20,14 @@ Supported ROS2 distributions:
 - Foxy
 - Galactic
 
-The asset can be prepared in two flavors:
+For Windows only, this asset can be prepared in two flavors:
 - standalone (no ROS2 installation required on target machine, e.g. your Unity3D simulation server). All required dependencies are installed and can be used e.g. as a complete set of Unity3D plugins.
 - overlay (assuming existing (supported) ROS2 installation on target machine). Only asset libraries and generated messages are installed.
 
 #### Platform considerations
 
-Running the Editor or App using this Asset on Ubuntu requires a start script that populates the `LD_LIBRARY_PATH`. This is due to dynamic plugin loading mechanism used in the ros2cs library.
-On Windows, no script is necessary and both Editor and App can be ran the usual way (e.g. with a click or cmd line).
+On Linux, you can run Editor and App in any way as long as ros2 is sourced in your environment. The best way to ensure that system-wide is to add `source /opt/ros/foxy/setup.bash` to your `~/.profile`
+file. This way running by clicking (Hub, Editor, or App executable) is supported as well as command line execution. Note that you need to re-log for changes in `~/.profile` to take place.
 
 ### Releases
 
@@ -93,7 +93,7 @@ The project will pull `ros2cs` into the workspace, which also functions independ
 *  Clone this project.
 *  If you wish to include custom messages in your build, make sure to put them into `ros2_for_unity_custom_messages.repos` file. You can change this file in your fork or change `custom_messages.repos` in the ros2cs repository fork, it will work either way as the scripts will pull both sources. 
    As an alternative, you can also add your custom messages package directly by copying it to `src/ros2cs/custom_messages` folder after the next step. Any message package in the build tree will be subjected to `.cs` file generator during the build.
-*  You need to source your ROS2 installation (e.g. `source /opt/ros/foxy/setup.bash` on Ubuntu or `C:\dev\ros2_foxy\local_setup.ps1` on Windows) before you proceed, for each new open terminal. On Ubuntu, you can also include this command in your `~/.bashrc` file.
+*  You need to source your ROS2 installation (e.g. `source /opt/ros/foxy/setup.bash` on Ubuntu or `C:\dev\ros2_foxy\local_setup.ps1` on Windows) before you proceed, for each new open terminal. On Ubuntu, it is most convenient to include this command in your `~/.profile` file.
 *  Run `pull_repositories.sh`. This will pull `ros2cs` as well as your custom messages.
 *  Run `build.sh` (Ubuntu) or `build.ps1` (Windows) script.
    * You can build tests by adding `--with-tests` argument to `build` command.
@@ -101,10 +101,10 @@ The project will pull `ros2cs` into the workspace, which also functions independ
    * It deploys built plugins into the Asset directory. Note that only plugins built for the current platform will be deployed (there is no cross-compilation).
    * It prepares Unity Asset that is ready to import into your Unity project.
 
-#### Standalone version
+#### Standalone version (Windows)
 
-By default, build process generates standalone libraries.
-You can disable this feature by setting CMake option `STANDALONE_BUILD` to `OFF` (e.g. through editing `build.sh`).
+By default, build process generates standalone libraries (on Windows only).
+You can disable this feature by setting CMake option `STANDALONE_BUILD` to `OFF` (e.g. through editing `build.ps1`).
 
 ## Running with Unity
 
@@ -118,17 +118,7 @@ Open your Unity3D project and import Ros2ForUnity Asset which is built by this p
 
 #### Additional considerations for Linux
 
-TODO - we are looking to replace this solution with something simpler. This section needs changes!
-
-After including the Asset, close the Editor. You need to use `start.py` from `linux-utils` directory. It is necessary to run your Unity3D Editor or built App.
-This can be done directly or through wrapping your Unity3D project into a ros2 python package (using files from `linux-utils`) and running `colcon build`, sourcing your workspace and calling `ros2 run ros2-for-unity start editor`.
-
-> This is due to the necessity for Unity3D to find all required assemblies. `dlopen` is used under the hood to dynamically
-   load necessary libraries (including custom messages and rmw implementation).
-   Note that unlike Windows `LoadLibrary`, `dlopen` uses `LD_LIBRARY_PATH` value from the start of the process execution and later modifications do not
-   affect the search paths. Thus, it is necessary to change `LD_LIBRARY_PATH` before the process starts.
-
-> Note that as an alternative, you can set the path manually in your system for the Editor, but consider that built App will have a different absolute path to plugins and can be moved and copied around, so this approach is not recommended.
+You need to have ros2 sourced in environment where you run Unity3D. See Platform Considerations for details.
 
 ### Building Unity3D application
 
@@ -137,14 +127,7 @@ You can do this standard way through `Build->Build Settings...`.
 
 ## Running application 
 
-### Windows
-
-You can run your application normally by clicking it or executing from command line.
-
-### Linux
-
-On Linux, follow the [Editor instructions](#running-the-editor), but use the start script (directly or through a package wrapper: `ros2 run ros2-for-unity start app --name:=<Your app name>`) to run your application. 
-This is necessary to ensure plugin visibility by setting `LD_LIBRARY_PATH`. 
+You can run your application in as standard way by clicking it or executing from command line.
 
 ## Full example (Windows)
 
