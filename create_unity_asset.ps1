@@ -3,7 +3,7 @@
 .SYNOPSIS
     Creates a 'unitypackage' from an input asset.
 .DESCRIPTION
-    This script screates a temporary Unity project in "%USERPROFILE%\AppData\Local\Temp" directory, copy input asset and makes an unity package out of it.
+    This script screates a temporary Unity project in "%USERPROFILE%\AppData\Local\Temp" directory, copy input asset and makes an unity package out of it. Valid Unity license is required.
 .PARAMETER unity_path
     Unity editor executable path
 .PARAMETER input_asset
@@ -15,13 +15,25 @@
 #>
 Param (
     [Parameter(Mandatory=$true)][string]$unity_path,
-    [Parameter(Mandatory=$true)][string]$input_asset,
-    [Parameter(Mandatory=$true)][string]$package_name,
-    [Parameter(Mandatory=$true)][string]$output_dir
+    [Parameter(Mandatory=$false)][string]$input_asset,
+    [Parameter(Mandatory=$false)][string]$package_name="Ros2ForUnity",
+    [Parameter(Mandatory=$false)][string]$output_dir
 )
 
 $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
 $temp_dir = $Env:TEMP
+
+if(-Not $PSBoundParameters.ContainsKey('input_asset')) {
+    $input_asset= Join-Path -Path $scriptPath -ChildPath "\src\Ros2ForUnity"
+}
+
+if(-Not $PSBoundParameters.ContainsKey('output_dir')) {
+    $output_dir= Join-Path -Path $scriptPath -ChildPath "\install\unity_package"
+}
+
+if(-Not (Test-Path -Path "$output_dir")) {
+    mkdir ${output_dir} | Out-Null
+}
 
 & "$unity_path" -version | Tee-Object -Variable unity_version | Out-Null
 
@@ -49,7 +61,7 @@ Copy-Item -Path "$input_asset" -Destination "$tmp_project_path\Assets\$package_n
 
 # Creating asset
 Write-Host "Saving unitypackage '$output_dir\$package_name.unitypackage'..."
-& "$unity_path" -projectPath "$tmp_project_path" -exportPackage "$package_name" "$output_dir\$package_name.unitypackage" -batchmode -quit | Out-Null
+& "$unity_path" -projectPath "$tmp_project_path" -exportPackage "Assets\$package_name" "$output_dir\$package_name.unitypackage" -batchmode -quit | Out-Null
 
 # Cleaning up
 Write-Host "Cleaning up temporary project..."

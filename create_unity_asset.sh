@@ -4,15 +4,15 @@ SCRIPT=$(readlink -f $0)
 SCRIPTPATH=`dirname $SCRIPT`
 
 display_usage() {
-  echo "This script creates a temporary Unity project in '/tmp' directory, copy input asset and makes an unity package out of it."
+  echo "This script creates a temporary Unity project in '/tmp' directory, copy input asset and makes an unity package out of it. Valid Unity license is required."
   echo ""
   echo "Usage:" 
-  echo "create_unity_asset.sh -u <UNITY_PATH> -i <INPUT_ASSET> -p <PACKAGE_NAME> -o <OUTPUT_DIR>"
+  echo "create_unity_asset.sh -u <UNITY_PATH> -i [INPUT_ASSET] -p [PACKAGE_NAME] -o [OUTPUT_DIR]"
   echo ""
   echo "UNITY_PATH - Unity editor executable path"
-  echo "INPUT_ASSET - input asset to pack into unity package"
-  echo "PACKAGE_NAME - unity package name"
-  echo "OUTPUT_DIR - output file directory"
+  echo "INPUT_ASSET - input asset to pack into unity package, default = 'src/Ros2ForUnity'"
+  echo "PACKAGE_NAME - unity package name, default = 'Ros2ForUnity'"
+  echo "OUTPUT_DIR - output file directory, default = 'install/unity_package'"
 }
 
 UNITY_PATH=""
