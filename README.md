@@ -78,7 +78,7 @@ The project will pull `ros2cs` into the workspace, which also functions independ
 
 #### Windows considerations
 
-> For **Windows**, [path length is limited to 260 characters](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation). Clone your repo to `C:\dev` or a similar shallow path to avoid this issue during build.
+> For **Windows**, [path length is limited to 260 characters](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation). Clone your repo to `C:\dev` into `r2fu` folder or a similar shallow path to avoid this issue during build. **Cloning into longer path will cause compilation errors!**
 
 > For **Windows**, a Visual Studio preconfigured powershell terminal must be used. Standard powershell prompt might not be configured properly to be used with MSVC compiler and Windows SDKs.  You should have Visual Studio already installed (ROS2 dependency) and you can find shortcut for `Developer PowerShell for VS` here: `C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Visual Studio 2019\Visual Studio Tools`. 
 
