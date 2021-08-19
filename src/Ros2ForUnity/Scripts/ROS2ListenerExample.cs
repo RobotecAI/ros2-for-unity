@@ -39,7 +39,7 @@ public class ROS2ListenerExample : MonoBehaviour
         {
             ros2Node = ros2Unity.CreateNode("ROS2UnityListenerNode");
             chatter_sub = ros2Node.CreateSubscription<std_msgs.msg.String>(
-              "chatter", msg => Console.WriteLine("Unity listener heard: [" + msg.Data + "]"));
+              "chatter", msg => Debug.Log("Unity listener heard: [" + msg.Data + "]"));
         }
     }
 }
