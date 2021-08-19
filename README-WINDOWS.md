@@ -27,9 +27,9 @@ Example for setting up `ros2cs` standalone with `Unity` editor on Windows (power
 
 ### Steps
 
-*  Clone this project and change name to `r2fu` shortcut with `git clone git@gitlab.com:robotec.ai/tieriv/ros2-for-unity.git r2fu` command. Anything longer can cause compilation errors due to Windows path lenght limitations.
+*  Clone this project and change name to `r2fu` shortcut with `git clone git@github.com:RobotecAI/ros2-for-unity.git r2fu` command. Anything longer can cause compilation errors due to Windows path lenght limitations.
 *  You need to source your ROS2 installation (`C:\dev\ros2_foxy\local_setup.ps1`) before you proceed, for each new terminal.
-*  Run `pull_repositories.ps1`. This will pull `ros2cs` as well as your custom messages. You will be asked for gitlab credentials, so please fill your information.
+*  Run `pull_repositories.ps1`. This will pull `ros2cs` as well as your custom messages. You will be asked for github credentials, so please fill your information.
 *  Run `build.ps1` script.
     * You can build tests by adding `--with-tests` argument to `build` command.
     * It invokes `colcon_build` with `--merge-install` argument to simplify libraries installation.
