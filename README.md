@@ -90,7 +90,7 @@ The project will pull `ros2cs` into the workspace, which also functions independ
 
 #### Build instructions
 
-*  Clone this project.
+*  Clone this project into a folder with a short path. `C:/dev/r2fu` should work, anything longer can cause compilation errors due to Windows path lenght limitations.
 *  If you wish to include custom messages in your build, make sure to put them into `ros2_for_unity_custom_messages.repos` file. You can change this file in your fork or change `custom_messages.repos` in the ros2cs repository fork, it will work either way as the scripts will pull both sources. 
    As an alternative, you can also add your custom messages package directly by copying it to `src/ros2cs/custom_messages` folder after the next step. Any message package in the build tree will be subjected to `.cs` file generator during the build.
 *  You need to source your ROS2 installation (e.g. `source /opt/ros/foxy/setup.bash` on Ubuntu or `C:\dev\ros2_foxy\local_setup.ps1` on Windows) before you proceed, for each new open terminal. On Ubuntu, it is most convenient to include this command in your `~/.profile` file.
