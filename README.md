@@ -1,5 +1,5 @@
 Ros2 For Unity
-=============
+===============
 
 ROS2 For Unity is a high-performance communication solution to connect Unity3D and ROS2 ecosystem in a ROS2 "native" way. Communication is not bridged as in several other solutions, but instead it uses ROS2 middleware stack (rcl layer and below), which means you can have ROS2 nodes in your simulation.
 Advantages of this module include:
@@ -41,13 +41,17 @@ Please see OS-specific instructions:
 
 ## Usage
 
-0. Perform building steps described in the OS-specific readme or download pre-built Unity package.
-1. Open or create Unity project.
-1. Go to Assets in the menu bar (at the top of the Unity Window).
-2. Select `Import Package` → `Custom Package`.
-3. In the file browser, select the .unitypackage file built by `create_unity_asset` script (by default located in `install/unity_package`) and follow the instructions on the screen.
-4. In the project tab, navigate to `Assets/Ros2ForUnity/Scripts`, select any object in the hierarchy tab, and add a script component by dragging `ROS2TalkerExample.cs` to the inspector tab. ROS2UnityComponent dependency will be added automatically (see the screenshot below).
-5. Select another object in the hierarchy tab and add repeat the previous step using `ROS2ListenerExample.cs`.
-6. Once you start the project in Unity, you should be able to see two nodes talking with each other in  Unity Editor's console or use `ros2 node list` and `ros2 topic echo /chatter` to verify ros2 communication.
+1. Perform building steps described in the OS-specific readme or download pre-built Unity package.
+2. Open or create Unity project.
+3. Go to Assets in the menu bar (at the top of the Unity Window).
+4. Select `Import Package` → `Custom Package`.
+5. In the file browser, select the .unitypackage file built by `create_unity_asset` script (by default located in `install/unity_package`) and follow the instructions on the screen.
+6. In the project tab, navigate to `Assets/Ros2ForUnity/Scripts`, select any object in the hierarchy tab, and add a script component by dragging `ROS2TalkerExample.cs` to the inspector tab. ROS2UnityComponent dependency will be added automatically (see the screenshot below).
+7. Select another object in the hierarchy tab and add repeat the previous step using `ROS2ListenerExample.cs`.
+8. Once you start the project in Unity, you should be able to see two nodes talking with each other in  Unity Editor's console or use `ros2 node list` and `ros2 topic echo /chatter` to verify ros2 communication.
 
 ![usage.png](usage.png)
+
+## Acknowledgements 
+
+Open-source release of ROS2 For Unity was made possible through cooperation with [Tier IV](https://tier4.jp). Thanks to encouragement, support and requirements driven by Tier IV the project was significantly improved in terms of portability, stability, core structure and user-friendliness.
