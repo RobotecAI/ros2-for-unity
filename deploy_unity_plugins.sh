@@ -5,7 +5,7 @@ SCRIPTPATH=`dirname $SCRIPT`
 
 if [ $# -eq 0 ] || [ $1 = "-h" ] || [ $1 = "--help" ]; then
   echo "Usage:" 
-  echo "deploy_unity_plugins.ps1 <PLUGINS_DIR>"
+  echo "deploy_unity_plugins.sh <PLUGINS_DIR>"
   echo ""
   echo "PLUGINS_DIR - Ros2ForUnity/Plugins folder."
   exit 1
