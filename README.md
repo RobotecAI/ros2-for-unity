@@ -28,7 +28,7 @@ For Windows only, this asset can be prepared in two flavors:
 
 The best way to start quickly is to use our releases.
 
-You can download pre-built [releases](https://github.com/RobotecAI/ros2-for-unity/releases/tag/1.0.0) of the Asset that support both platforms and specific ros2 and Unity3D versions.
+You can download pre-built [releases](https://github.com/RobotecAI/ros2-for-unity/releases) of the Asset that support both platforms and specific ros2 and Unity3D versions.
 
 ## Building
 
