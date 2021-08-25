@@ -15,7 +15,7 @@ Example for setting up `ros2cs` standalone with `Unity` editor on Windows (power
 
 ### Important notices
 
-* For **Windows**, [path length is limited to 260 characters](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation). Clone your repo to `C:\dev` into `r2fu` folder or a similar shallow path to avoid this issue during build. **Cloning into longer path will cause compilation errors!**
+* For **Windows**, [path length is limited to 260 characters](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation) by default. A good solution is to modify your `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem` registry key `LongPathsEnabled` to 1. This way you will avoid path length issues. Alternatively, you need to clone your repo to `C:\dev` into `r2fu` folder or a similar shallow path to avoid this issue during build. **Cloning into longer path will cause compilation errors!**
 
 * For **Windows**, a Visual Studio preconfigured powershell terminal must be used. Standard powershell prompt might not be configured properly to be used with MSVC compiler and Windows SDKs.  You should have Visual Studio already installed (ROS2 dependency) and you can find shortcut for `Developer PowerShell for VS` here: `C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Visual Studio 2019\Visual Studio Tools`.
 
@@ -27,7 +27,7 @@ Example for setting up `ros2cs` standalone with `Unity` editor on Windows (power
 
 ### Steps
 
-*  Clone this project and change name to `r2fu` shortcut with `git clone git@github.com:RobotecAI/ros2-for-unity.git r2fu` command. Anything longer can cause compilation errors due to Windows path lenght limitations.
+*  Make sure [long paths on Windows are enabled](#important-notices) and clone this repository. 
 *  You need to source your ROS2 installation (`C:\dev\ros2_foxy\local_setup.ps1`) before you proceed, for each new terminal.
 *  Run `pull_repositories.ps1`. This will pull `ros2cs` as well as your custom messages. You will be asked for github credentials, so please fill your information.
 *  Run `build.ps1` script.
