@@ -6,15 +6,17 @@ This readme contains information specific to Ubuntu 20.04. For general informati
 
 ### Prerequisites
 
-*  ROS2 installed on the system, along with `test-msgs` and `fastrtps` packages
+*  ROS2 installed on the system, along with `test-msgs`, `cyclonedds` and `fastrtps` packages
 *  vcstool package - [see here](https://github.com/dirk-thomas/vcstool)
 *  .NET core 3.1 sdk - [see here](https://www.microsoft.com/net/learn/get-started)
 
 The following script can be used to install the aforementioned prerequisites:
 
 ```bash
-# Install tests-msgs for your ROS2 distribution
-apt install -y ros-${ROS_DISTRO}-test-msgs ros-${ROS_DISTRO}-fastrtps ros-${ROS_DISTRO}-rmw-fastrtps-cpp
+# Install rmw and tests-msgs for your ROS2 distribution
+apt install -y ros-${ROS_DISTRO}-test-msgs 
+apt install -y ros-${ROS_DISTRO}-fastrtps ros-${ROS_DISTRO}-rmw-fastrtps-cpp
+apt install -y ros-${ROS_DISTRO}-cyclonedds ros-${ROS_DISTRO}-rmw-cyclonedds-cpp
 
 # Install vcstool package
 curl -s https://packagecloud.io/install/repositories/dirk-thomas/vcstool/script.deb.sh | sudo bash
