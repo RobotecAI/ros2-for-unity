@@ -144,7 +144,7 @@ internal class ROS2ForUnity
         if (string.IsNullOrEmpty(currentVersion))
         {
             string errMessage = "No ROS environment sourced. You need to source your ROS2 " + supportedVersionsString
-              + " environment before launching Unity. Make sure you launch with the start app/editor script";
+              + " environment before launching Unity (ROS_DISTRO env variable not found)";
             Debug.LogError(errMessage);
 #if UNITY_EDITOR
             EditorApplication.isPlaying = false;
