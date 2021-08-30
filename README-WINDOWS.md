@@ -8,7 +8,7 @@ We assume working directory is `C:\dev` and we are using `ROS2 foxy` (replace wi
 
 ### Prerequisites
 
-It is necessary to complete all the steps for `ros2cs` [Prequisites](https://github.com/RobotecAI/ros2cs/blob/master/README-WINDOWS.md#prequisites) and consider [Important notices](https://github.com/RobotecAI/ros2cs/blob/master/README-WINDOWS.md#important-notices) sections.
+It is necessary to complete all the steps for `ros2cs` [Prerequisites](https://github.com/RobotecAI/ros2cs/blob/master/README-WINDOWS.md#prerequisites) and consider [Important notices](https://github.com/RobotecAI/ros2cs/blob/master/README-WINDOWS.md#important-notices) sections.
 
 ### Steps
 
