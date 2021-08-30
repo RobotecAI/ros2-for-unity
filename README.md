@@ -53,8 +53,6 @@ Please see OS-specific instructions:
 8. Select another object in the hierarchy tab and add repeat the previous step using `ROS2ListenerExample.cs`.
 9. Once you start the project in Unity, you should be able to see two nodes talking with each other in  Unity Editor's console or use `ros2 node list` and `ros2 topic echo /chatter` to verify ros2 communication.
 
-![usage.png](usage.png)
-
 ## Acknowledgements 
 
 Open-source release of ROS2 For Unity was made possible through cooperation with [Tier IV](https://tier4.jp). Thanks to encouragement, support and requirements driven by Tier IV the project was significantly improved in terms of portability, stability, core structure and user-friendliness.
