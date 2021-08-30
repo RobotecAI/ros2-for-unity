@@ -6,7 +6,7 @@ This readme contains information specific to Ubuntu 20.04. For general informati
 
 ### Prerequisites
 
-Start with installation of dependencies. Make sure to complete each step of `ros2cs` [Prequisites section](https://github.com/RobotecAI/ros2cs/blob/master/README-UBUNTU.md#prequisites).
+Start with installation of dependencies. Make sure to complete each step of `ros2cs` [Prerequisites section](https://github.com/RobotecAI/ros2cs/blob/master/README-UBUNTU.md#prerequisites).
 
 ### Steps
 
