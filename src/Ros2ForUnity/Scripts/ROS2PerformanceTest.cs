@@ -21,7 +21,6 @@ namespace ROS2
 /// <summary>
 /// An example class provided for performance testing of ROS2 communication
 /// </summary>
-[RequireComponent(typeof(ROS2UnityComponent))]
 public class ROS2PerformanceTest : MonoBehaviour
 {
     public int messageSize = 10000;

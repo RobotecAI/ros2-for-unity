@@ -20,7 +20,6 @@ namespace ROS2
 /// <summary>
 /// An example class provided for testing of basic ROS2 communication
 /// </summary>
-[RequireComponent(typeof(ROS2UnityComponent))]
 public class ROS2TalkerExample : MonoBehaviour
 {
     // Start is called before the first frame update

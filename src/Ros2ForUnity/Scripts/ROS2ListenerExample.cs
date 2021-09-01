@@ -21,7 +21,6 @@ namespace ROS2
 /// <summary>
 /// An example class provided for testing of basic ROS2 communication
 /// </summary>
-[RequireComponent(typeof(ROS2UnityComponent))]
 public class ROS2ListenerExample : MonoBehaviour
 {
     private ROS2UnityComponent ros2Unity;
