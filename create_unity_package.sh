@@ -7,16 +7,16 @@ display_usage() {
   echo "This script creates a temporary Unity project in '/tmp' directory, copy input asset and makes an unity package out of it. Valid Unity license is required."
   echo ""
   echo "Usage:" 
-  echo "create_unity_asset.sh -u <UNITY_PATH> -i [INPUT_ASSET] -p [PACKAGE_NAME] -o [OUTPUT_DIR]"
+  echo "create_unity_package.sh -u <UNITY_PATH> -i [INPUT_ASSET] -p [PACKAGE_NAME] -o [OUTPUT_DIR]"
   echo ""
   echo "UNITY_PATH - Unity editor executable path"
-  echo "INPUT_ASSET - input asset to pack into unity package, default = 'src/Ros2ForUnity'"
+  echo "INPUT_ASSET - input asset to pack into unity package, default = 'install/asset/Ros2ForUnity'"
   echo "PACKAGE_NAME - unity package name, default = 'Ros2ForUnity'"
   echo "OUTPUT_DIR - output file directory, default = 'install/unity_package'"
 }
 
 UNITY_PATH=""
-INPUT_ASSET="src/Ros2ForUnity"
+INPUT_ASSET="install/asset/Ros2ForUnity"
 PACKAGE_NAME="Ros2ForUnity"
 OUTPUT_DIR="$SCRIPTPATH/install/unity_package"
 
@@ -48,7 +48,6 @@ while [[ $# -gt 0 ]]; do
       display_usage
       exit 0
       shift # past argument
-      shift # past value
       ;;
     *)    # unknown option
       shift # past argument
@@ -60,6 +59,11 @@ if [ -z "$UNITY_PATH" ] || [ -z "$PACKAGE_NAME" ] || [ -z "$INPUT_ASSET" ] || [ 
     echo -e "\nMissing arguments!"
     echo ""
     display_usage
+    exit 1
+fi
+
+if [ ! -d "$INPUT_ASSET" ]; then
+    echo "Input asset '$INPUT_ASSET' doesn't exist!  Use 'build.sh' to build project first."
     exit 1
 fi
 

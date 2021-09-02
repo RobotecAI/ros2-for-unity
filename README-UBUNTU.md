@@ -15,10 +15,11 @@ Start with installation of dependencies. Make sure to complete each step of `ros
 *  Run `pull_repositories.sh`. This will pull `ros2cs` as well as your custom messages. You might be asked for gitlab credentials. Remember to **pull this repository with each update** (e.g. with `vcs pull`).
 *  Run `build.sh` script.
     * You can build tests by adding `--with-tests` argument to `build` command.
+    * You can build with `--clean-install` to make sure your installation directory is cleaned before deploying.
     * It invokes `colcon_build` with `--merge-install` argument to simplify libraries installation.
     * It deploys built plugins into the Asset directory. Note that only plugins built for the current platform will be deployed (there is no cross-compilation).
-    * It prepares Unity Asset that is ready to import into your Unity project.
-* Run `create_unity_asset.sh -u <your-path-to-unity-editor-executable>` to generate .unitypackage file in `install/unity_package`
+    * It prepares Unity Asset that is ready to import into your Unity project (`install/asset/` directory).
+* Run `create_unity_package.sh -u <your-path-to-unity-editor-executable>` to generate .unitypackage file in `install/unity_package`
 
 ## OS-Specific usage remarks
 
