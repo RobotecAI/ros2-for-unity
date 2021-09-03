@@ -7,7 +7,7 @@
 .PARAMETER with_tests
     Build tests
 .PARAMETER standalone
-    Add ros2 binaries
+    Add ros2 binaries. Currently standalone flag is fixed to true, so there is no way to build without standalone libs. Parameter kept for future releases
 .PARAMETER clean_install
     Makes a clean installation. Removes install dir before deploying
 #>
@@ -24,25 +24,20 @@ if(-Not (Test-Path -Path "$scriptPath\src\ros2cs")) {
     exit 1
 }
 
-
 Write-Host $msg -ForegroundColor Green
-$options=""
-if($with_tests) {
-    $options="--with-tests"
+$options = @{
+    with_tests = $with_tests
+    standalone = $standalone
 }
-if($standalone) {
-    $options="--standalone"
-}
-
 
 if($clean_install) {
     Write-Host "Cleaning install directory..." -ForegroundColor White
     Remove-Item -Path "$scriptPath\install" -Force -Recurse -ErrorAction Ignore
 }
-& "$scriptPath\src\ros2cs\build.ps1" $options
+& "$scriptPath\src\ros2cs\build.ps1" @options
 if($?) {
-    mkdir $scriptPath\install\asset | Out-Null
-    (Copy-Item -verbose -Path $scriptPath\src\Ros2ForUnity -Destination $scriptPath\install\asset\Ros2ForUnity 4>&1).Message
+    md -Force $scriptPath\install\asset | Out-Null
+    Copy-Item -Path $scriptPath\src\Ros2ForUnity -Destination $scriptPath\install\asset\ -Recurse -Force
     
     $plugin_path=Join-Path -Path $scriptPath -ChildPath "\install\asset\Ros2ForUnity\Plugins\"
     Write-Host "Deploying build to $plugin_path" -ForegroundColor Green
