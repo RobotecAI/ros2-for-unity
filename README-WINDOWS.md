@@ -20,14 +20,15 @@ It is necessary to complete all the steps for `ros2cs` [Prerequisites](https://g
 * Run `pull_repositories.ps1`. This will pull `ros2cs` as well as your custom messages. You might be asked for github credentials.
 * Run `build.ps1` script.
   * Optionally, you can build tests by adding `--with-tests` argument to `build` command.
+  * You can build with `--clean-install` to make sure your installation directory is cleaned before deploying.
   * This ivokes `colcon_build` with `--merge-install` argument to simplify libraries installation.
   * It deploys built plugins into the Asset directory. Note that only plugins built for the current platform will be deployed (there is no cross-compilation).
-  * It prepares Unity Asset that is ready to import into your Unity project.
+  * It prepares Unity Asset that is ready to import into your Unity project (`install/asset/` directory).
   * By default, build process generates standalone libraries on Windows.
       You can disable this feature by setting CMake option `STANDALONE_BUILD` to `OFF` (e.g. through editing `build.ps1`).
-* In order to generate `Ros2ForUnity.unitypackage` please run `create_unity_asset.ps1`. Please provide path to your Unity executable when prompted.
+* In order to generate `Ros2ForUnity.unitypackage` please run `create_unity_package.ps1`. Please provide path to your Unity executable when prompted.
   * Asset can be found in `install\unity_package` directory
-  * In case your Unity license has expired, the `create_unity_asset.ps1` won't throw any errors but `Ros2ForUnity.unitypackage` won't be generated too.
+  * In case your Unity license has expired, the `create_unity_package.ps1` won't throw any errors but `Ros2ForUnity.unitypackage` won't be generated too.
 * At this moment you have two valid forms of the Asset.
   * One is available as `src\Ros2ForUnity` folder which you can simply copy to Unity3D `Assets` directory.
   * Second one is `Ros2ForUnity.unitypackage` which you can import in Unity3D.

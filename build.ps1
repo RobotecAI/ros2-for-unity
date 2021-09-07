@@ -1,30 +1,50 @@
+
+<#
+.SYNOPSIS
+    Builds Ros2ForUnity asset
+.DESCRIPTION
+    This script builds Ros2DorUnity asset
+.PARAMETER with_tests
+    Build tests
+.PARAMETER standalone
+    Add ros2 binaries. Currently standalone flag is fixed to true, so there is no way to build without standalone libs. Parameter kept for future releases
+.PARAMETER clean_install
+    Makes a clean installation. Removes install dir before deploying
+#>
+Param (
+    [Parameter(Mandatory=$false)][switch]$with_tests=$false,
+    [Parameter(Mandatory=$false)][switch]$standalone=$true,
+    [Parameter(Mandatory=$false)][switch]$clean_install=$false
+)
+
 $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
 
-function Print-Help {
-"
-Usage: 
-build.ps1 [--with-tests]
-
-Options:
---with-tests - build with tests.
-"
+if(-Not (Test-Path -Path "$scriptPath\src\ros2cs")) {
+    Write-Host "Pull repositories with 'pull_repositories.ps1' first." -ForegroundColor Red
+    exit 1
 }
-
-$tests=0
-$msg="Build started."
-if ($args[0] -eq "--with-tests") {
-    $tests=1
-    $msg+=" (with tests)"
-} elseif ($args[0] -eq "--help" -Or $args[0] -eq "-h") {
-    Print-Help
-    exit
-}
-
-$tests_info=0
-$plugin_path=Join-Path -Path $scriptPath -ChildPath "\src\Ros2ForUnity\Plugins\"
 
 Write-Host $msg -ForegroundColor Green
-colcon build --merge-install --event-handlers console_direct+ --cmake-args -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=$tests
+$options = @{
+    with_tests = $with_tests
+    standalone = $standalone
+}
 
-Write-Host "Deploying build to $plugin_path" -ForegroundColor Green
-& "$scriptPath\deploy_unity_plugins.ps1" $plugin_path
+if($clean_install) {
+    Write-Host "Cleaning install directory..." -ForegroundColor White
+    Remove-Item -Path "$scriptPath\install" -Force -Recurse -ErrorAction Ignore
+}
+& "$scriptPath\src\ros2cs\build.ps1" @options
+if($?) {
+    md -Force $scriptPath\install\asset | Out-Null
+    Copy-Item -Path $scriptPath\src\Ros2ForUnity -Destination $scriptPath\install\asset\ -Recurse -Force
+    
+    $plugin_path=Join-Path -Path $scriptPath -ChildPath "\install\asset\Ros2ForUnity\Plugins\"
+    Write-Host "Deploying build to $plugin_path" -ForegroundColor Green
+    & "$scriptPath\deploy_unity_plugins.ps1" $plugin_path
+} else {
+    Write-Host "Ros2cs build failed!" -ForegroundColor Red
+    exit 1
+}
+
+

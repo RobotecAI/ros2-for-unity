@@ -24,11 +24,16 @@ $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
 $temp_dir = $Env:TEMP
 
 if(-Not $PSBoundParameters.ContainsKey('input_asset')) {
-    $input_asset= Join-Path -Path $scriptPath -ChildPath "\src\Ros2ForUnity"
+    $input_asset= Join-Path -Path $scriptPath -ChildPath "\install\asset\Ros2ForUnity"
 }
 
 if(-Not $PSBoundParameters.ContainsKey('output_dir')) {
     $output_dir= Join-Path -Path $scriptPath -ChildPath "\install\unity_package"
+}
+
+if(-Not (Test-Path -Path "$input_asset")) {
+    Write-Host "Input asset '$input_asset' doesn't exist! Use 'build.ps1' to build project first." -ForegroundColor Red
+    exit 1
 }
 
 if(-Not (Test-Path -Path "$output_dir")) {
