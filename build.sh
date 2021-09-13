@@ -53,7 +53,7 @@ done
 
 if [ $CLEAN_INSTALL == 1 ]; then
     echo "Cleaning install directory..."
-    rm -rf "$SCRIPTPATH/install"
+    rm -rf $SCRIPTPATH/install/*
 fi
 if $SCRIPTPATH/src/ros2cs/build.sh $OPTIONS; then
     mkdir -p $SCRIPTPATH/install/asset && cp -R $SCRIPTPATH/src/Ros2ForUnity $SCRIPTPATH/install/asset/Ros2ForUnity
