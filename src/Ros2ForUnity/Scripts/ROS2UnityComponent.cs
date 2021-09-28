@@ -49,7 +49,7 @@ public class ROS2UnityComponent : MonoBehaviour
         }
     }
 
-    public LazyConstruct()
+    private LazyConstruct()
     {
         lock (mutex)
         {        
