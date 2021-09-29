@@ -13,7 +13,7 @@ fi
 
 pluginDir=$1
 
-cp --verbose $SCRIPTPATH/install/lib/dotnet/* ${pluginDir}
 mkdir -p  ${pluginDir}/Linux/x86_64/
+cp --verbose $SCRIPTPATH/install/lib/dotnet/* ${pluginDir}
 cp --verbose $SCRIPTPATH/install/standalone/* ${pluginDir}/Linux/x86_64/
 cp --verbose $SCRIPTPATH/install/lib/*.so ${pluginDir}/Linux/x86_64/
