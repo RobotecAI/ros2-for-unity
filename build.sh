@@ -56,7 +56,7 @@ if [ $CLEAN_INSTALL == 1 ]; then
     rm -rf $SCRIPTPATH/install/*
 fi
 if $SCRIPTPATH/src/ros2cs/build.sh $OPTIONS; then
-    mkdir -p $SCRIPTPATH/install/asset && cp -R $SCRIPTPATH/src/Ros2ForUnity $SCRIPTPATH/install/asset/Ros2ForUnity
+    mkdir -p $SCRIPTPATH/install/asset && cp -R $SCRIPTPATH/src/Ros2ForUnity $SCRIPTPATH/install/asset/
     $SCRIPTPATH/deploy_unity_plugins.sh $SCRIPTPATH/install/asset/Ros2ForUnity/Plugins/
 else
     echo "Ros2cs build failed!"
