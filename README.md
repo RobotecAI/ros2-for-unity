@@ -46,7 +46,7 @@ Please see OS-specific instructions:
 1. Perform building steps described in the OS-specific readme or download pre-built Unity package.
 2. Open or create Unity project.
 3. Go to Assets in the menu bar (at the top of the Unity Window).
-4. Select `Import Package` → `Custom Package`.
+4. Select `Import Package` → `Custom Package`. Make sure that the asset name is Ros2ForUnity and it is directly in the Assets folder.
 5. In the file browser, select the .unitypackage file built by `create_unity_package` script (by default located in `install/unity_package`) and follow the instructions on the screen.
 6. Create a top-level object containing `ROS2UnityComponent.cs`. This is the central Monobehavior for `ROS2 For Unity` that manages all the nodes. Refer to class documentation for details.
 7. Add example script to any object in the hierarchy tab, e.g. by dragging `ROS2TalkerExample.cs` to the object in the inspector tab.
