@@ -43,7 +43,7 @@ Please see OS-specific instructions:
 
 ## Usage
 
-1. Perform building steps described in the OS-specific readme or download pre-built Unity package.
+1. Perform building steps described in the OS-specific readme or download pre-built Unity package. Do not source ros2-for-unity nor ros2cs.
 2. Open or create Unity project.
 3. Go to Assets in the menu bar (at the top of the Unity Window).
 4. Select `Import Package` → `Custom Package`. Make sure that the asset name is Ros2ForUnity and it is directly in the Assets folder.
