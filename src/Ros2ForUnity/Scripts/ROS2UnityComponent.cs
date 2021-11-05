@@ -49,22 +49,29 @@ public class ROS2UnityComponent : MonoBehaviour
         }
     }
 
-    void Awake()
+    private LazyConstruct()
     {
-        if (ros2forUnity == null)
-        {
-            lock (mutex)
-            {
-                ros2forUnity = new ROS2ForUnity();
-                nodes = new List<ROS2Node>();
-                ros2csNodes = new List<INode>();
-                executableActions = new List<Action>();
-            }
+        lock (mutex)
+        {        
+            if (ros2forUnity != null)
+                return;
+
+            ros2forUnity = new ROS2ForUnity();
+            nodes = new List<ROS2Node>();
+            ros2csNodes = new List<INode>();
+            executableActions = new List<Action>();
         }
+    }
+
+    void Start()
+    {
+        LazyConstruct();
     }
 
     public ROS2Node CreateNode(string name)
     {
+        LazyConstruct();
+
         lock (mutex)
         {
             foreach (ROS2Node n in nodes)
@@ -97,6 +104,8 @@ public class ROS2UnityComponent : MonoBehaviour
     /// </summary>
     public void RegisterExecutable(Action executable)
     {
+        LazyConstruct();
+
         lock (mutex)
         {
             executableActions.Add(executable);
