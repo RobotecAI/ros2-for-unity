@@ -19,13 +19,12 @@ It is necessary to complete all the steps for `ros2cs` [Prerequisites](https://g
 * Source your ROS2 installation (`C:\dev\ros2_foxy\local_setup.ps1`) in the terminal before you proceed.
 * Run `pull_repositories.ps1`. This will pull `ros2cs` as well as your custom messages. You might be asked for github credentials.
 * Run `build.ps1` script.
-  * Optionally, you can build tests by adding `--with-tests` argument to `build` command.
-  * You can build with `--clean-install` to make sure your installation directory is cleaned before deploying.
+  * Optionally, you can build tests by adding `-with_tests` argument to `build` command.
+  * You can build with `-clean_install` to make sure your installation directory is cleaned before deploying.
   * This ivokes `colcon_build` with `--merge-install` argument to simplify libraries installation.
   * It deploys built plugins into the Asset directory. Note that only plugins built for the current platform will be deployed (there is no cross-compilation).
   * It prepares Unity Asset that is ready to import into your Unity project (`install/asset/` directory).
-  * By default, build process generates standalone libraries on Windows.
-      You can disable this feature by setting CMake option `STANDALONE_BUILD` to `OFF` (e.g. through editing `build.ps1`).
+  * Currently Windows OS supports standalone build only.
 * In order to generate `Ros2ForUnity.unitypackage` please run `create_unity_package.ps1`. Please provide path to your Unity executable when prompted.
   * Asset can be found in `install\unity_package` directory
   * In case your Unity license has expired, the `create_unity_package.ps1` won't throw any errors but `Ros2ForUnity.unitypackage` won't be generated too.
@@ -69,9 +68,9 @@ pip install numpy
 
 ## OS-Specific usage remarks
 
-> If the Asset is built with `STANDALONE_BUILD` option set to `1` (the default), then nothing extra needs to be done.
+> If the Asset is built with `-standalone` flag (the default), then nothing extra needs to be done.
 Otherwise, you have to source your ros distribution before launching either Unity3D Editor or Application.
 
-> Note that after you build the Asset, you can use it on a machine that has no ros2 installation (if built with `STANDALONE_BUILD`).
+> Note that after you build the Asset, you can use it on a machine that has no ros2 installation (if built with `-standalone`).
 
 > You can simply copy over the `Ros2ForUnity` subdirectory to update your Asset.
