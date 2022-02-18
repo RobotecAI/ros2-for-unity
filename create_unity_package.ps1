@@ -43,11 +43,20 @@ if(-Not (Test-Path -Path "$output_dir")) {
 & "$unity_path" -version | Tee-Object -Variable unity_version | Out-Null
 
 if ($unity_version -match '^[0-9]{4}\.[0-9]*\.[0-9]*[f]?[0-9]*$') {
-    Write-Host "Unity editor confirmed..."
+    Write-Host "Unity editor confirmed."
 } else {
-    Write-Host "Can't confirm Unity editor. Exiting."
-    exit 1
+    while (1) {
+        $confirmation = Read-Host "Can't confirm Unity editor. Do you want to force $unity_path as an Unity editor executable? [y]es or [n]o"
+        if ($confirmation -eq 'y' -or $confirmation -eq 'Y') {
+            break;
+        } elseif ( $confirmation -eq 'n' -or $confirmation -eq 'N' ) {
+            exit 1;
+        } else {
+            Write-Host "Please answer [y]es or [n]o.";
+        }
+    }
 }
+Write-Host "Using ${unity_path} editor."
 
 $tmp_project_path = Join-Path -Path "$temp_dir" -ChildPath "\ros2cs_unity_project\$unity_version"
 
