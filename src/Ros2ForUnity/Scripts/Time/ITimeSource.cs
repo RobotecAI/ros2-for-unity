@@ -18,9 +18,9 @@ namespace ROS2
 /// <summary>
 /// Interace for acquiring time
 /// </summary>
-internal interface ITimeSource
+public interface ITimeSource
 {
-  void GetTime(out int seconds, out uint nanoseconds);
+  public void GetTime(out int seconds, out uint nanoseconds);
 }
 
 }  // namespace ROS2

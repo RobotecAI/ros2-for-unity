@@ -13,8 +13,7 @@
 // limitations under the License.
 
 using System;
-using System.Threading;
-
+using System.Diagnostics;
 
 namespace ROS2
 {
@@ -35,12 +34,12 @@ public class DotnetTimeSource : ITimeSource
 
     private double stopwatchStartTimeStamp;
 
-    DotnetTimeSource()
+    public DotnetTimeSource()
     {
-        stopwatchStartTimeStamp = stopwatch.GetTimestamp();
+        stopwatchStartTimeStamp = Stopwatch.GetTimestamp();
     }
 
-    void GetTime(out int seconds, out uint nanoseconds)
+    public void GetTime(out int seconds, out uint nanoseconds)
     {
         lock(mutex) // Threading
         {

@@ -23,7 +23,7 @@ namespace ROS2
 /// </summary>
 public class ROS2Clock
 {
-    private ITimeSource timeSource;
+    private ITimeSource _timeSource;
 
     public ROS2Clock() : this(new DotnetTimeSource())
     {   // By default, use DotnetTimeSource
@@ -31,24 +31,32 @@ public class ROS2Clock
 
     public ROS2Clock(ITimeSource ts)
     {
-        timeSource = ts;
+        _timeSource = ts;
     }
 
     public void UpdateClockMessage(ref rosgraph_msgs.msg.Clock clockMessage)
     {
-        _timeSource.GetTime(out clockMessage.Clock_.Sec, out clockMessage.Clock_.Nanosec);
+        int seconds;
+        uint nanoseconds;
+        _timeSource.GetTime(out seconds, out nanoseconds);
+        clockMessage.Clock_.Sec = seconds;
+        clockMessage.Clock_.Nanosec = nanoseconds;
     }
 
     public void UpdateROSClockTime(builtin_interfaces.msg.Time time)
     {
-        timeSource.GetTime(out time.Sec, out time.Nanosec);
+        int seconds;
+        uint nanoseconds;
+        _timeSource.GetTime(out seconds, out nanoseconds);
+        time.Sec = seconds;
+        time.Nanosec = nanoseconds;
     }
 
     public void UpdateROSTimestamp(ref ROS2.MessageWithHeader message)
     {
         int seconds;
         uint nanoseconds;
-        timeSource.GetTime(out seconds, out nanoseconds);
+        _timeSource.GetTime(out seconds, out nanoseconds);
         message.UpdateHeaderTime(seconds, nanoseconds);
     }
 }

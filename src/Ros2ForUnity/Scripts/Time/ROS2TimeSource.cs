@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
+using UnityEngine;
 
 namespace ROS2
 {
@@ -24,7 +24,7 @@ public class ROS2TimeSource : ITimeSource
 {
   private ROS2.Clock clock;
 
-  void GetTime(out int seconds, out uint nanoseconds)
+  public void GetTime(out int seconds, out uint nanoseconds)
   {
     if (!ROS2.Ros2cs.Ok())
     {

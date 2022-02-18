@@ -35,7 +35,7 @@ public class UnityTimeSource : ITimeSource
     mainThread = Thread.CurrentThread;
   }
 
-  void GetTime(out int seconds, out uint nanoseconds)
+  public void GetTime(out int seconds, out uint nanoseconds)
   {
     lastReadingSecs = mainThread.Equals(Thread.CurrentThread) ? Time.timeAsDouble : lastReadingSecs;
     TimeUtils.TimeFromTotalSeconds(lastReadingSecs, out seconds, out nanoseconds);

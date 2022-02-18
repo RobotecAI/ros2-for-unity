@@ -20,9 +20,9 @@ namespace ROS2
 /// </summary>
 internal static class TimeUtils
 {
-  void TimeFromTotalSeconds(in double seconds, out int seconds, out uint nanoseconds)
+  public static void TimeFromTotalSeconds(in double secondsIn, out int seconds, out uint nanoseconds)
   {
-    long nanosec = (long)(seconds * 1e9);
+    long nanosec = (long)(secondsIn * 1e9);
     seconds = (int)(nanosec / 1000000000);
     nanoseconds = (uint)(nanosec % 1000000000);
   }
