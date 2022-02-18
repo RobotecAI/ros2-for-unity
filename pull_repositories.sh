@@ -8,8 +8,18 @@ if [ -z "${ROS_DISTRO}" ]; then
     exit 1
 fi
 
+echo "========================================="
+echo "* Pulling ros2cs repository:"
 vcs import < "ros2cs.repos"
+
+echo ""
+echo "========================================="
+echo "Pulling custom repositories:"
 vcs import < "ros2_for_unity_custom_messages.repos"
+
+echo ""
+echo "========================================="
+echo "Pulling ros2cs dependencies:"
 cd "$SCRIPTPATH/src/ros2cs"
 ./get_repos.sh
 cd -
