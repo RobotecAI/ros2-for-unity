@@ -25,8 +25,8 @@ public class ROS2Clock
 {
     private ITimeSource _timeSource;
 
-    public ROS2Clock() : this(new DotnetTimeSource())
-    {   // By default, use DotnetTimeSource
+    public ROS2Clock() : this(new ROS2TimeSource())
+    {   // By default, use ROS2TimeSource
     }
 
     public ROS2Clock(ITimeSource ts)

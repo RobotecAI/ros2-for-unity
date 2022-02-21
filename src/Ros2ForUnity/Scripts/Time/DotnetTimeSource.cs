@@ -34,9 +34,20 @@ public class DotnetTimeSource : ITimeSource
 
     private double stopwatchStartTimeStamp;
 
+    private double TotalSystemTimeSeconds()
+    {
+        return TimeSpan.FromTicks(DateTime.UtcNow.Ticks).TotalSeconds;
+    }
+
+    private void UpdateSystemTime()
+    {
+        systemTimeIntervalStart = TotalSystemTimeSeconds();
+        stopwatchStartTimeStamp = Stopwatch.GetTimestamp();
+    }
+
     public DotnetTimeSource()
     {
-        stopwatchStartTimeStamp = Stopwatch.GetTimestamp();
+        UpdateSystemTime();
     }
 
     public void GetTime(out int seconds, out uint nanoseconds)
@@ -44,12 +55,11 @@ public class DotnetTimeSource : ITimeSource
         lock(mutex) // Threading
         {
             double endTimestamp = Stopwatch.GetTimestamp();
-            var durationInSeconds = (endTimestamp - stopwatchStartTimeStamp) / Stopwatch.Frequency;
+            var durationInSeconds = endTimestamp - stopwatchStartTimeStamp;
             double timeOffset = 0;
             if (durationInSeconds >= maxUnsyncedSeconds)
             {   // acquire DateTime to sync
-                stopwatchStartTimeStamp = Stopwatch.GetTimestamp();
-                systemTimeIntervalStart = TimeSpan.FromTicks(DateTime.UtcNow.Ticks).TotalSeconds;
+                UpdateSystemTime();
             }
             else
             {   // use Stopwatch offset
