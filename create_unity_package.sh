@@ -71,11 +71,20 @@ UNITY_VERSION=`$UNITY_PATH -version`
 
 # Test if unity editor is valid
 if [[ $UNITY_VERSION =~ ^[0-9]{4}\.[0-9]*\.[0-9]*[f]?[0-9]*$ ]]; then
-    echo "Unity editor confirmed..."
+    echo "Unity editor confirmed."
 else
-    echo "Can't confirm Unity editor. Exiting."
-    exit 1
+    while true; do
+      read -p "Can't confirm Unity editor. Do you want to force \"$UNITY_PATH\" as an Unity editor executable? [y]es or [N]o: " yn
+      yn=${yn:-"n"}
+      case $yn in
+          [Yy]* ) break;;
+          [Nn]* ) exit 1;;
+          * ) echo "Please answer [y]es or [n]o.";;
+      esac
+    done
 fi
+
+echo "Using \"${UNITY_PATH}\" editor."
 
 TMP_PROJECT_PATH=/tmp/ros2cs_unity_project/$UNITY_VERSION
 # Create temp project

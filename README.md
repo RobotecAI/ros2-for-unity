@@ -20,11 +20,14 @@ Supported ROS2 distributions:
 - Foxy
 - Galactic
 
-Tested Unity3D version: 2021.1.7f1.
+Supported Unity3d:
+- 2020+
 
-For Windows only, this asset can be prepared in two flavors:
-- standalone (no ROS2 installation required on target machine, e.g. your Unity3D simulation server). All required dependencies are installed and can be used e.g. as a complete set of Unity3D plugins.
-- overlay (assuming existing (supported) ROS2 installation on target machine). Only asset libraries and generated messages are installed.
+Older versions of Unity3d may work, but the editor executable most probably won't be detected properly by deployment script. This would require user confirmation for using unsupported version.
+
+For Windows, this asset can be prepared in standalone mode only (no ROS2 installation required on target machine, e.g. your Unity3D simulation server). All required dependencies are installed and can be used e.g. as a complete set of Unity3D plugins.
+
+For Ubuntu, this asset can be prepared in overlay mode only (assuming existing (supported) ROS2 installation on target machine). Only asset libraries and generated messages are installed.
 
 ## Releases
 
