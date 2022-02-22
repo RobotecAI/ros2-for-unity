@@ -45,6 +45,8 @@ public class ROS2UnityComponent : MonoBehaviour
     {
         lock (mutex)
         {
+            if (ros2forUnity == null)
+                LazyConstruct();
             return (nodes != null && ros2forUnity.Ok());
         }
     }

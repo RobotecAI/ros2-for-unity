@@ -1,4 +1,4 @@
-// Copyright 2019-2021 Robotec.ai.
+// Copyright 2019-2022 Robotec.ai.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,56 +19,45 @@ namespace ROS2
 {
 
 /// <summary>
-/// A ros2 clock wrapper class that can acquire ros2 time on demand. It does not include a publisher.
-/// (Not every clock needs to be associated with a publisher)
+/// A ros2 clock class that for interfacing between a time source (unity or ros2 system time) and ros2cs messages, structs. 
 /// </summary>
 public class ROS2Clock
 {
-    private int seconds;
-    private uint nanoseconds;
-    private ROS2.Clock clock;
+    private ITimeSource _timeSource;
 
-    public ROS2Clock()
-    {
-        clock = new ROS2.Clock();
+    public ROS2Clock() : this(new ROS2TimeSource())
+    {   // By default, use ROS2TimeSource
     }
 
-    ~ROS2Clock()
+    public ROS2Clock(ITimeSource ts)
     {
-        clock.Dispose();
+        _timeSource = ts;
     }
 
     public void UpdateClockMessage(ref rosgraph_msgs.msg.Clock clockMessage)
     {
-        GetRosTime();
+        int seconds;
+        uint nanoseconds;
+        _timeSource.GetTime(out seconds, out nanoseconds);
         clockMessage.Clock_.Sec = seconds;
         clockMessage.Clock_.Nanosec = nanoseconds;
     }
 
     public void UpdateROSClockTime(builtin_interfaces.msg.Time time)
     {
-        GetRosTime();
-        time.Nanosec = nanoseconds;
+        int seconds;
+        uint nanoseconds;
+        _timeSource.GetTime(out seconds, out nanoseconds);
         time.Sec = seconds;
+        time.Nanosec = nanoseconds;
     }
 
     public void UpdateROSTimestamp(ref ROS2.MessageWithHeader message)
     {
-        GetRosTime();
+        int seconds;
+        uint nanoseconds;
+        _timeSource.GetTime(out seconds, out nanoseconds);
         message.UpdateHeaderTime(seconds, nanoseconds);
-    }
-
-    private void GetRosTime()
-    {
-        if (!ROS2.Ros2cs.Ok())
-        {
-          Debug.LogWarning("Cannot update ros time, ros2 either not initialized or shut down already");
-          return;
-        }
-
-        long nanosec = (long)(clock.Now.Seconds * 1e9);
-        seconds = (int)(nanosec / 1000000000);
-        nanoseconds = (uint)(nanosec % 1000000000);
     }
 }
 
