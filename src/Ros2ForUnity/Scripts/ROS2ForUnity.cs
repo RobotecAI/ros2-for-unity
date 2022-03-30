@@ -136,7 +136,7 @@ internal class ROS2ForUnity
     /// Check if the ros version is supported, only applicable to non-standalone plugin versions
     /// (i. e. without ros2 libraries included in the plugin).
     /// </summary>
-    private void CheckROSVersionSourced()
+    private string CheckROSVersionSourced()
     {
         string currentVersion = Environment.GetEnvironmentVariable("ROS_DISTRO");
         List<string> supportedVersions = new List<string>() { "foxy", "galactic" };
@@ -169,6 +169,7 @@ internal class ROS2ForUnity
 #endif
         }
         Debug.Log("Running with a supported ROS 2 version: " + currentVersion);
+        return currentVersion;
     }
 
     private void RegisterCtrlCHandler()
@@ -200,9 +201,14 @@ internal class ROS2ForUnity
         } else {
             // Linux version needs to have ros2 sourced, which is checked here. It also loads plugins by absolute path
             // since LD_LIBRARY_PATH cannot be set dynamically within the process for dlopen() which is used under the hood.
-            // Since libraries are built with -rpath=".", dependencies will be correcly located within plugins directory
-            CheckROSVersionSourced();
+            // Since libraries are built with -rpath=".", dependencies will be correcly located within plugins directory.
+            // For foxy, it is also necessary to use modified version of librcpputils to resolve custom msgs packages.
+            string currentRosVersion = CheckROSVersionSourced();
             ROS2.GlobalVariables.absolutePath = GetPluginPath() + "/";
+            if (currentRosVersion == "foxy") {
+                ROS2.GlobalVariables.preloadLibrary = true;
+                ROS2.GlobalVariables.preloadLibraryName = "librcpputils.so";
+            }
         }
         ConnectLoggers();
         Ros2cs.Init();
