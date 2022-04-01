@@ -34,6 +34,13 @@ if($clean_install) {
     Write-Host "Cleaning install directory..." -ForegroundColor White
     Remove-Item -Path "$scriptPath\install" -Force -Recurse -ErrorAction Ignore
 }
+
+if($standalone) {}
+  & "python3 $SCRIPTPATH\src\scripts\metadata_generator.py" --standalone
+} else {
+  & "python3 $SCRIPTPATH\src\scripts\metadata_generator.py"
+}
+
 & "$scriptPath\src\ros2cs\build.ps1" @options
 if($?) {
     md -Force $scriptPath\install\asset | Out-Null
@@ -42,6 +49,9 @@ if($?) {
     $plugin_path=Join-Path -Path $scriptPath -ChildPath "\install\asset\Ros2ForUnity\Plugins\"
     Write-Host "Deploying build to $plugin_path" -ForegroundColor Green
     & "$scriptPath\deploy_unity_plugins.ps1" $plugin_path
+
+    Copy-Item -Path $scriptPath\src\Ros2ForUnity\metadata_ros2cs.xml -Destination $scriptPath\install\asset\Ros2ForUnity\Plugins\Linux\x86_64\
+    Copy-Item -Path $scriptPath\src\Ros2ForUnity\metadata_ros2cs.xml -Destination $scriptPath\install\asset\Ros2ForUnity\Plugins\
 } else {
     Write-Host "Ros2cs build failed!" -ForegroundColor Red
     exit 1
