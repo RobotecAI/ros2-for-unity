@@ -309,7 +309,9 @@ internal class ROS2ForUnity
         Ros2cs.Init();
         RegisterCtrlCHandler();
 
-        Ros2csLogger.GetInstance().LogInfo("ROS2 version: " + currentRos2Version + ". Build type: " + standalone);
+        string rmwImpl = Ros2cs.GetRMWImplementation();
+
+        Debug.Log("ROS2 version: " + currentRos2Version + ". Build type: " + standalone + ". RMW: " + rmwImpl);
 
 #if UNITY_EDITOR
         EditorApplication.playModeStateChanged += this.EditorPlayStateChanged;
