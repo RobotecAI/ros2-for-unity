@@ -38,7 +38,7 @@ internal class ROS2ForUnity
         Linux
     }
     
-    private Platform GetOS()
+    private static Platform GetOS()
     {
         if (Application.platform == RuntimePlatform.LinuxEditor || Application.platform == RuntimePlatform.LinuxPlayer)
         {
@@ -51,11 +51,11 @@ internal class ROS2ForUnity
         throw new System.NotSupportedException("Only Linux and Windows are supported");
     }
 
-    private bool InEditor() {
+    private static bool InEditor() {
         return Application.isEditor;
     }
     
-    private string GetOSName()
+    private static string GetOSName()
     {
         switch (GetOS())
         {
@@ -83,7 +83,7 @@ internal class ROS2ForUnity
         return Environment.GetEnvironmentVariable(GetEnvPathVariableName());
     }
 
-    private string GetRos2ForUnityPath()
+    public static string GetRos2ForUnityPath()
     {
         char separator = Path.DirectorySeparatorChar;
         string appDataPath = Application.dataPath;
@@ -95,7 +95,7 @@ internal class ROS2ForUnity
         return pluginPath; 
     }
 
-    private string GetPluginPath()
+    public static string GetPluginPath()
     {
         char separator = Path.DirectorySeparatorChar;
         string ros2ForUnityPath = GetRos2ForUnityPath();
