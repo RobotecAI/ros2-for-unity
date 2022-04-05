@@ -17,6 +17,7 @@ import xml.etree.ElementTree as ET
 from xml.dom import minidom
 import subprocess
 import pathlib
+import os
 
 parser = argparse.ArgumentParser(description='Generate metadata file for ros2-for-unity.')
 parser.add_argument('--standalone', action='store_true', help='is a standalone build')
@@ -46,15 +47,18 @@ def get_ros2cs_path() -> pathlib.Path:
 def get_ros2_path() -> pathlib.Path:
     return get_ros2cs_path().joinpath("src").joinpath("ros2").joinpath("rcl_interfaces")
 
+def get_ros2_version() -> str:
+    return os.environ.get("ROS_DISTRO", "unknown")
+
 ros2_for_unity = ET.Element("ros2_for_unity")
-ET.SubElement(ros2_for_unity, "ros2").text = get_git_abbrev(get_ros2_path())
+ET.SubElement(ros2_for_unity, "ros2").text = get_ros2_version()
 ros2_for_unity_version = ET.SubElement(ros2_for_unity, "version")
 ET.SubElement(ros2_for_unity_version, "sha").text = get_git_commit(get_ros2_for_unity_root_path())
 ET.SubElement(ros2_for_unity_version, "desc").text = get_git_description(get_ros2_for_unity_root_path())
 ET.SubElement(ros2_for_unity_version, "date").text = get_commit_date(get_ros2_for_unity_root_path())
 
 ros2_cs = ET.Element("ros2cs")
-ET.SubElement(ros2_cs, "ros2").text = get_git_abbrev(get_ros2_path())
+ET.SubElement(ros2_cs, "ros2").text = get_ros2_version()
 ros2_cs_version = ET.SubElement(ros2_cs, "version")
 ET.SubElement(ros2_cs_version, "sha").text = get_git_commit(get_ros2cs_path())
 ET.SubElement(ros2_cs_version, "desc").text = get_git_description(get_ros2cs_path())

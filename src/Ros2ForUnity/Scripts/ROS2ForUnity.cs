@@ -203,7 +203,7 @@ internal class ROS2ForUnity
     /// </summary>
     private void CheckROSSupport(string ros2Codename)
     {
-        List<string> supportedVersions = new List<string>() { "foxy", "galactic" };
+        List<string> supportedVersions = new List<string>() { "foxy", "galactic", "humble", "rolling" };
         var supportedVersionsString = String.Join(", ", supportedVersions);
         if (string.IsNullOrEmpty(ros2Codename))
         {
@@ -231,6 +231,8 @@ internal class ROS2ForUnity
             const int ROS_BAD_VERSION_CODE = 34;
             Application.Quit(ROS_BAD_VERSION_CODE);
 #endif
+        } else if (ros2Codename.Equals("rolling") ) {
+            Debug.LogWarning("You are using ROS2 rolling version. Bleeding edge version might not work correctly.");
         }
     }
 
