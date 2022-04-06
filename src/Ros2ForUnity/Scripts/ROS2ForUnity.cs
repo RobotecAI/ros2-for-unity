@@ -271,8 +271,8 @@ internal class ROS2ForUnity
         }
         catch (System.IO.FileNotFoundException)
         {
-            var errMessage = "Could not find metadata files.";
 #if UNITY_EDITOR
+            var errMessage = "Could not find metadata files.";
             EditorApplication.isPlaying = false;
             throw new System.IO.FileNotFoundException(errMessage);
 #else
