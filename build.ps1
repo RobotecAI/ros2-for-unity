@@ -35,10 +35,10 @@ if($clean_install) {
     Remove-Item -Path "$scriptPath\install" -Force -Recurse -ErrorAction Ignore
 }
 
-if($standalone) {}
-  & "python3 $SCRIPTPATH\src\scripts\metadata_generator.py" --standalone
+if($standalone) {
+  & "python" $SCRIPTPATH\src\scripts\metadata_generator.py --standalone
 } else {
-  & "python3 $SCRIPTPATH\src\scripts\metadata_generator.py"
+  & "python" $SCRIPTPATH\src\scripts\metadata_generator.py
 }
 
 & "$scriptPath\src\ros2cs\build.ps1" @options
