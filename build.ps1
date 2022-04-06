@@ -13,7 +13,7 @@
 #>
 Param (
     [Parameter(Mandatory=$false)][switch]$with_tests=$false,
-    [Parameter(Mandatory=$false)][switch]$standalone=$true,
+    [Parameter(Mandatory=$false)][switch]$standalone=$false,
     [Parameter(Mandatory=$false)][switch]$clean_install=$false
 )
 
@@ -50,7 +50,7 @@ if($?) {
     Write-Host "Deploying build to $plugin_path" -ForegroundColor Green
     & "$scriptPath\deploy_unity_plugins.ps1" $plugin_path
 
-    Copy-Item -Path $scriptPath\src\Ros2ForUnity\metadata_ros2cs.xml -Destination $scriptPath\install\asset\Ros2ForUnity\Plugins\Linux\x86_64\
+    Copy-Item -Path $scriptPath\src\Ros2ForUnity\metadata_ros2cs.xml -Destination $scriptPath\install\asset\Ros2ForUnity\Plugins\Windows\x86_64\
     Copy-Item -Path $scriptPath\src\Ros2ForUnity\metadata_ros2cs.xml -Destination $scriptPath\install\asset\Ros2ForUnity\Plugins\
 } else {
     Write-Host "Ros2cs build failed!" -ForegroundColor Red
