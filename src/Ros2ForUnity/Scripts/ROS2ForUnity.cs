@@ -32,13 +32,13 @@ internal class ROS2ForUnity
     private XmlDocument ros2csMetadata = new XmlDocument();
     private XmlDocument ros2ForUnityMetadata = new XmlDocument();
 
-    enum Platform
+    public enum Platform
     {
         Windows,
         Linux
     }
     
-    private static Platform GetOS()
+    public static Platform GetOS()
     {
         if (Application.platform == RuntimePlatform.LinuxEditor || Application.platform == RuntimePlatform.LinuxPlayer)
         {
