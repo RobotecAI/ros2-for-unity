@@ -46,6 +46,12 @@ Please see OS-specific instructions:
 - [Instructions for Ubuntu 20.04](README-UBUNTU.md)
 - [Instructions for Windows 10](README-WINDOWS.md)
 
+## Custom messages
+
+Custom messages can be included in the build by either:
+* list them in `ros2_for_unity_custom_messages.repos` file, or
+* manually inserting them in `src/ros2cs` directory. If the folder doesn't exist, you must pull repositories first (see building steps for each OS).
+
 ## Installation
 
 1. Perform building steps described in the OS-specific readme or download pre-built Unity package. Do not source `ros2-for-unity` nor `ros2cs`.
