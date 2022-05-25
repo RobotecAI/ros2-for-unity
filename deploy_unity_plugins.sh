@@ -14,7 +14,7 @@ fi
 pluginDir=$1
 
 mkdir -p  ${pluginDir}/Linux/x86_64/
-cp $SCRIPTPATH/install/lib/dotnet/* ${pluginDir}
+find install/lib/dotnet/ -maxdepth 1 -not -name "*.pdb" -type f -exec cp {} ${pluginDir} \;
 cp $SCRIPTPATH/install/standalone/* ${pluginDir}/Linux/x86_64/
-cp $SCRIPTPATH/install/lib/*.so ${pluginDir}/Linux/x86_64/
+find install/lib/ -maxdepth 1 -not -name "*_py.so" -not -name "*_python.so" -type f -exec cp {} ${pluginDir}/Linux/x86_64/ \;
 cp $SCRIPTPATH/install/resources/*.so ${pluginDir}/Linux/x86_64/
