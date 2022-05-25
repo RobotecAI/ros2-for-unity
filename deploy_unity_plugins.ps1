@@ -18,13 +18,13 @@ if (([string]::IsNullOrEmpty($pluginDir)) -Or $args[0] -eq "--help" -Or $args[0]
 
 if (Test-Path -Path $pluginDir) {
     Write-Host "Copying plugins to to: '$pluginDir' ..."
-    (Copy-Item -Path $scriptPath\install\lib\dotnet\* -Destination ${pluginDir} 4>&1).Message
+    Get-ChildItem $scriptPath\install\lib\dotnet\ -Recurse -Exclude @('*.pdb') | Copy-Item -Destination ${pluginDir}
     Write-Host "Plugins copied to: '$pluginDir'" -ForegroundColor Green
     if(-not (Test-Path -Path $pluginDir\Windows\x86_64\)) {
         mkdir ${pluginDir}\Windows\x86_64\
     }
     Write-Host "Copying libraries to: '$pluginDir\Windows\x86_64\' ..."
-    (Copy-Item -Path $scriptPath\install\bin\*.dll -Destination ${pluginDir}\Windows\x86_64\ 4>&1).Message
+    Get-ChildItem $scriptPath\install\bin\ -Recurse -Exclude @('*_py.dll', '*_python.dll') | Copy-Item -Destination ${pluginDir}\Windows\x86_64\
     if(-not (Test-Path -Path $scriptPath\install\standalone\)) {
         mkdir $scriptPath\install\standalone
     }
