@@ -4,7 +4,7 @@ This readme contains information specific to Window 10. For general information,
 
 ## Building
 
-We assume working directory is `C:\dev` and we are using `ROS2 galactic` (replace with `foxy` or `humble` where applicable).
+We assume that working directory is `C:\dev` and we are using `ROS2 galactic` (replace with `foxy` or `humble` where applicable).
 
 ### Prerequisites
 
@@ -36,7 +36,7 @@ It is necessary to complete all the steps for `ros2cs` [Prerequisites](https://g
 * Build `Ros2ForUnty`. You can build it in standalone or overlay mode.
     ```powershell
     # standalone mode
-    ./build.ps1 --standalone
+    ./build.ps1 -standalone
     
     # overlay mode
     ./build.ps1

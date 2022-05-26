@@ -4,7 +4,7 @@ This readme contains information specific to Ubuntu 20.04. For general informati
 
 ## Building
 
-We assume working directory is `~/ros2-for-unity` and we are using `ROS2 galactic` (replace with `foxy` or `humble` where applicable).
+We assume that working directory is `~/ros2-for-unity` and we are using `ROS2 galactic` (replace with `foxy` or `humble` where applicable).
 
 ### Prerequisites
 

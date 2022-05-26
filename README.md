@@ -6,13 +6,14 @@ Advantages of this module include:
 - High performance - higher throughput and considerably lower latencies comparing to bridging solutions.
 - Your simulation entities are real ROS2 nodes / publishers / subscribers. They will behave correctly with e.g. command line tools such as `ros2 topic`. They will respect QoS settings and can use ROS2 native time.
 - The module supplies abstractions and tools to use in your Unity project, including transformations, sensor interface, a clock, spinning loop wrapped in a MonoBehavior, handling initialization and shutdown.
-- Supports all standard ROS2 messages
+- Supports all standard ROS2 messages.
 - Custom messages are generated automatically with build, using standard ROS2 way. It is straightforward to generate and use them without having to define `.cs` equivalents by hand.
 - The module is wrapped as a Unity asset.
 
 ## Platforms
 
 Supported OSes:
+- Ubuntu 22.04 (bash)
 - Ubuntu 20.04 (bash)
 - Windows 10 (powershell)
 
@@ -39,7 +40,7 @@ You can download pre-built [releases](https://github.com/RobotecAI/ros2-for-unit
 
 ## Building
 
-Note: The project will pull `ros2cs` into the workspace, which also functions independently as it is a more general project aimed at any `C# / .Net` environment.
+> **Note:** The project will pull `ros2cs` into the workspace, which also functions independently as it is a more general project aimed at any `C# / .Net` environment.
 It has its own README and scripting, but for building the Unity Asset, please use instructions and scripting in this document instead, unless you also wish to run tests or examples for `ros2cs`.
 
 Please see OS-specific instructions:
@@ -54,7 +55,7 @@ Custom messages can be included in the build by either:
 
 ## Installation
 
-1. Perform building steps described in the OS-specific readme or download pre-built Unity package. Do not source `ros2-for-unity` nor `ros2cs`.
+1. Perform building steps described in the OS-specific readme or download pre-built Unity package. Do not source `ros2-for-unity` nor `ros2cs` project into ROS2 workspace.
 1. Open or create Unity project.
 1. Import asset into project:
     1. copy `install/asset/Ros2ForUnity` into your project `Assets` folder, or
@@ -127,9 +128,9 @@ otherwise
 ### Examples
 
 1. Create a top-level object containing `ROS2UnityComponent.cs`. This is the central `Monobehavior` for `Ros2ForUnity` that manages all the nodes. Refer to class documentation for details.
-1. Add example script to any object in the hierarchy tab, e.g. by dragging `ROS2TalkerExample.cs` to the object in the inspector tab.
-1. Select another object in the hierarchy tab and add repeat the previous step using `ROS2ListenerExample.cs`.
-    > **_NOTE:_** Each example script must find `ROS2UnityComponent.cs` in its game object. However, this is not a requirement, just example implementation.
+1. Add `ROS2TalkerExample.cs` script to the very same game object.
+1. Add `ROS2ListenerExample.cs` script to the very same game object.
+    > **Note:** Each example script looks for `ROS2UnityComponent` in its own game object. However, this is not a requirement, just example implementation.
 1. Once you start the project in Unity, you should be able to see two nodes talking with each other in  Unity Editor's console or use `ros2 node list` and `ros2 topic echo /chatter` to verify ros2 communication.
 ## Acknowledgements 
 
