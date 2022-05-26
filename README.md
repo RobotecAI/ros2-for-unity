@@ -19,15 +19,17 @@ Supported OSes:
 Supported ROS2 distributions:
 - Foxy
 - Galactic
+- Humble
 
 Supported Unity3d:
 - 2020+
 
 Older versions of Unity3d may work, but the editor executable most probably won't be detected properly by deployment script. This would require user confirmation for using unsupported version.
 
-For Windows, this asset can be prepared in standalone mode only (no ROS2 installation required on target machine, e.g. your Unity3D simulation server). All required dependencies are installed and can be used e.g. as a complete set of Unity3D plugins.
+This asset can be prepared in two flavours:
 
-For Ubuntu, this asset can be prepared in overlay mode only (assuming existing (supported) ROS2 installation on target machine). Only asset libraries and generated messages are installed.
+- standalone mode, where no ROS2 installation required on target machine, e.g. your Unity3D simulation server. All required dependencies are installed and can be used e.g. as a complete set of Unity3D plugins.
+- overlay mode, where the ROS2 installation is required on target machine. Only asset libraries and generated messages are installed therefore ROS2 instance must be sourced.
 
 ## Releases
 
@@ -44,18 +46,91 @@ Please see OS-specific instructions:
 - [Instructions for Ubuntu 20.04](README-UBUNTU.md)
 - [Instructions for Windows 10](README-WINDOWS.md)
 
+## Custom messages
+
+Custom messages can be included in the build by either:
+* list them in `ros2_for_unity_custom_messages.repos` file, or
+* manually inserting them in `src/ros2cs` directory. If the folder doesn't exist, you must pull repositories first (see building steps for each OS).
+
+## Installation
+
+1. Perform building steps described in the OS-specific readme or download pre-built Unity package. Do not source `ros2-for-unity` nor `ros2cs`.
+1. Open or create Unity project.
+1. Import asset into project:
+    1. copy `install/asset/Ros2ForUnity` into your project `Assets` folder, or
+    1. if you have deployed an `.unitypackage` - import it in Unity Editor by selecting `Import Package` → `Custom Package`
+
 ## Usage
 
-1. Perform building steps described in the OS-specific readme or download pre-built Unity package. Do not source ros2-for-unity nor ros2cs.
-2. Open or create Unity project.
-3. Go to Assets in the menu bar (at the top of the Unity Window).
-4. Select `Import Package` → `Custom Package`. Make sure that the asset name is Ros2ForUnity and it is directly in the Assets folder.
-5. In the file browser, select the .unitypackage file built by `create_unity_package` script (by default located in `install/unity_package`) and follow the instructions on the screen.
-6. Create a top-level object containing `ROS2UnityComponent.cs`. This is the central Monobehavior for `ROS2 For Unity` that manages all the nodes. Refer to class documentation for details.
-7. Add example script to any object in the hierarchy tab, e.g. by dragging `ROS2TalkerExample.cs` to the object in the inspector tab.
-8. Select another object in the hierarchy tab and add repeat the previous step using `ROS2ListenerExample.cs`.
-9. Once you start the project in Unity, you should be able to see two nodes talking with each other in  Unity Editor's console or use `ros2 node list` and `ros2 topic echo /chatter` to verify ros2 communication.
+**Prerequisites**
 
+* If your build was prepared with `--standalone` flag then you are fine, and all you have to do is run the editor
+
+otherwise
+
+* source ROS2 which matches the `Ros2ForUnity` version, then run the editor from within the very same terminal/console.
+
+**Initializing Ros2ForUnity**
+
+1. Initialize `Ros2ForUnity` by creating a "hook" object which will be your wrapper around ROS2. You have two options:
+    1. `ROS2UnityComponent` based on `MonoBehaviour` which must be attached to a `GameObject` somewhere in the scene, then:
+        ```c#
+        using ROS2;
+        ...
+        // Example method of getting component, if ROS2UnityComponent lives in different GameObject, just use different get component methods.
+        ROS2UnityComponent ros2Unity = GetComponent<ROS2UnityComponent>();
+        ```
+    1. or `ROS2UnityCore` which is a standard class that can be created anywhere
+        ```c#
+        using ROS2;
+        ...
+        ROS2UnityCore ros2Unity = new ROS2UnityCore();
+        ```
+1. Create a node. You must first check if `Ros2ForUnity` is initialized correctly:
+    ```c#
+    private ROS2Node ros2Node;
+    ...
+    if (ros2Unity.Ok()) {
+        ros2Node = ros2Unity.CreateNode("ROS2UnityListenerNode");
+    }
+    ```
+
+**Publishing messages:**
+
+1. Create publisher
+    ```c#
+    private IPublisher<std_msgs.msg.String> chatter_pub;
+    ...
+    if (ros2Unity.Ok()){
+        chatter_pub = ros2Node.CreatePublisher<std_msgs.msg.String>("chatter"); 
+    }
+    ```
+1. Send messages
+    ```c#
+    std_msgs.msg.String msg = new std_msgs.msg.String();
+    msg.Data = "Hello Ros2ForUnity!";
+    chatter_pub.Publish(msg);
+    ```
+
+**Subscribing to a topic**
+
+1. Create subscriber:
+    ```c#
+    private ISubscription<std_msgs.msg.String> chatter_sub;
+    ...
+    if (ros2Unity.Ok()) {
+        chatter_sub = ros2Node.CreateSubscription<std_msgs.msg.String>(
+            "chatter", msg => Debug.Log("Unity listener heard: [" + msg.Data + "]"));
+    }
+    ```
+
+### Examples
+
+1. Create a top-level object containing `ROS2UnityComponent.cs`. This is the central `Monobehavior` for `Ros2ForUnity` that manages all the nodes. Refer to class documentation for details.
+1. Add example script to any object in the hierarchy tab, e.g. by dragging `ROS2TalkerExample.cs` to the object in the inspector tab.
+1. Select another object in the hierarchy tab and add repeat the previous step using `ROS2ListenerExample.cs`.
+    > **_NOTE:_** Each example script must find `ROS2UnityComponent.cs` in its game object. However, this is not a requirement, just example implementation.
+1. Once you start the project in Unity, you should be able to see two nodes talking with each other in  Unity Editor's console or use `ros2 node list` and `ros2 topic echo /chatter` to verify ros2 communication.
 ## Acknowledgements 
 
 Open-source release of ROS2 For Unity was made possible through cooperation with [Tier IV](https://tier4.jp). Thanks to encouragement, support and requirements driven by Tier IV the project was significantly improved in terms of portability, stability, core structure and user-friendliness.
