@@ -13,9 +13,10 @@ Advantages of this module include:
 ## Platforms
 
 Supported OSes:
-- Ubuntu 22.04 (bash)
 - Ubuntu 20.04 (bash)
 - Windows 10 (powershell)
+
+> **Notice:** Currently, ros2 humble is only supported on Ubuntu 20.04. You have to build it from sources since it is not available in `apt`.
 
 Supported ROS2 distributions:
 - Foxy
