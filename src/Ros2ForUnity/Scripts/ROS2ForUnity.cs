@@ -32,13 +32,13 @@ internal class ROS2ForUnity
     private XmlDocument ros2csMetadata = new XmlDocument();
     private XmlDocument ros2ForUnityMetadata = new XmlDocument();
 
-    enum Platform
+    public enum Platform
     {
         Windows,
         Linux
     }
     
-    private static Platform GetOS()
+    public static Platform GetOS()
     {
         if (Application.platform == RuntimePlatform.LinuxEditor || Application.platform == RuntimePlatform.LinuxPlayer)
         {
@@ -203,7 +203,7 @@ internal class ROS2ForUnity
     /// </summary>
     private void CheckROSSupport(string ros2Codename)
     {
-        List<string> supportedVersions = new List<string>() { "foxy", "galactic" };
+        List<string> supportedVersions = new List<string>() { "foxy", "galactic", "humble", "rolling" };
         var supportedVersionsString = String.Join(", ", supportedVersions);
         if (string.IsNullOrEmpty(ros2Codename))
         {
@@ -231,6 +231,8 @@ internal class ROS2ForUnity
             const int ROS_BAD_VERSION_CODE = 34;
             Application.Quit(ROS_BAD_VERSION_CODE);
 #endif
+        } else if (ros2Codename.Equals("rolling") ) {
+            Debug.LogWarning("You are using ROS2 rolling version. Bleeding edge version might not work correctly.");
         }
     }
 
@@ -269,8 +271,8 @@ internal class ROS2ForUnity
         }
         catch (System.IO.FileNotFoundException)
         {
-            var errMessage = "Could not find metadata files.";
 #if UNITY_EDITOR
+            var errMessage = "Could not find metadata files.";
             EditorApplication.isPlaying = false;
             throw new System.IO.FileNotFoundException(errMessage);
 #else

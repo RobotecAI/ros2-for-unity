@@ -1,16 +1,17 @@
-ARG ROS2_DISTRO=foxy
+ARG ROS2_DISTRO=humble
 FROM ros:${ROS2_DISTRO}-ros-base
 
-RUN apt update && apt install -y ros-foxy-test-msgs ros-foxy-fastrtps ros-foxy-rmw-fastrtps-cpp ros-foxy-cyclonedds ros-foxy-rmw-cyclonedds-cpp
+RUN apt update && apt install -y ros-${ROS_DISTRO}-test-msgs ros-${ROS_DISTRO}-fastrtps ros-${ROS_DISTRO}-rmw-fastrtps-cpp ros-${ROS_DISTRO}-cyclonedds ros-${ROS_DISTRO}-rmw-cyclonedds-cpp
 
 RUN apt update && apt install -y curl wget git
 
 RUN curl -s https://packagecloud.io/install/repositories/dirk-thomas/vcstool/script.deb.sh | sudo bash
 RUN apt update && apt install -y python3-vcstool
 
-RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb 
+RUN wget https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
 RUN dpkg -i packages-microsoft-prod.deb
-RUN apt update && apt install -y apt-transport-https dotnet-sdk-3.1
+RUN apt update && apt install -y apt-transport-https patchelf; if [ "$(lsb_release -rs)" = "22.04" ] ; then apt install -y dotnet-sdk-6.0 ; else apt install -y dotnet-sdk-3.1; fi
+RUN apt update && apt install -y ffmpeg libsm6 libxext6 libgtk-3-0
 
 ADD entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh

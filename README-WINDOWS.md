@@ -1,10 +1,10 @@
 # ROS2 For Unity - Windows 10
 
-This readme contains information specific to Window 10. For general information, please see README.md
+This readme contains information specific to Window 10. For general information, please see [README.md](README.md).
 
 ## Building
 
-We assume working directory is `C:\dev` and we are using `ROS2 foxy` (replace with `Galactic` where applicable).
+We assume that working directory is `C:\dev` and we are using `ROS2 galactic` (replace with `foxy` or `humble` where applicable).
 
 ### Prerequisites
 
@@ -15,22 +15,39 @@ It is necessary to complete all the steps for `ros2cs` [Prerequisites](https://g
 * Make sure [long paths on Windows are enabled](https://github.com/RobotecAI/ros2cs/blob/master/README-WINDOWS.md#important-notices)
 * Make sure you open [`Developer PowerShell for VS` with administrator privileges](https://github.com/RobotecAI/ros2cs/blob/master/README-WINDOWS.md#important-notices)
 * For `ros2 galactic` distribution, it is best to [create a `C:\ci\ws\install\include` directory](https://github.com/RobotecAI/ros2cs/blob/master/README-WINDOWS.md#important-notices)
-* Clone this repository.
+* Clone this project.
+  ```powershell
+  git clone git@github.com:RobotecAI/ros2-for-unity.git C:\dev\ros2-for-unity
+  ```
 * Source your ROS2 installation (`C:\dev\ros2_foxy\local_setup.ps1`) in the terminal before you proceed.
-* Run `pull_repositories.ps1`. This will pull `ros2cs` as well as your custom messages. You might be asked for github credentials.
-* Run `build.ps1` script.
-  * Optionally, you can build tests by adding `-with_tests` argument to `build` command.
+  ```
+  C:\dev\ros2_foxy\local_setup.ps1
+  ```
+* Enter `Ros2ForUnity` working directory.
+    ```powershell
+    cd C:\dev\ros2-for-unity
+    ```
+* Set up you custom messages in `ros2_for_unity_custom_messages.repos`
+* Import necessary and custom messages repositories.
+    ```powershell
+    .\pull_repositories.ps1
+    ```
+    > *NOTE* `pull_repositories.ps1` script doesn't update already existing repositories, you have to remove `src\ros2cs` folder to re-import new versions.
+* Build `Ros2ForUnty`. You can build it in standalone or overlay mode.
+    ```powershell
+    # standalone mode
+    ./build.ps1 -standalone
+    
+    # overlay mode
+    ./build.ps1
+    ```
   * You can build with `-clean_install` to make sure your installation directory is cleaned before deploying.
-  * This ivokes `colcon_build` with `--merge-install` argument to simplify libraries installation.
-  * It deploys built plugins into the Asset directory. Note that only plugins built for the current platform will be deployed (there is no cross-compilation).
-  * It prepares Unity Asset that is ready to import into your Unity project (`install/asset/` directory).
-  * Currently Windows OS supports standalone build only.
-* In order to generate `Ros2ForUnity.unitypackage` please run `create_unity_package.ps1`. Please provide path to your Unity executable when prompted.
-  * Asset can be found in `install\unity_package` directory
-  * In case your Unity license has expired, the `create_unity_package.ps1` won't throw any errors but `Ros2ForUnity.unitypackage` won't be generated too.
-* At this moment you have two valid forms of the Asset.
-  * One is available as `src\Ros2ForUnity` folder which you can simply copy to Unity3D `Assets` directory.
-  * Second one is `Ros2ForUnity.unitypackage` which you can import in Unity3D.
+* Unity Asset is ready to import into your Unity project. You can find it in `install/asset/` directory.
+* (optionally) To create `.unitypackage` in `install/unity_package`
+  ```powershell
+  create_unity_package.ps1
+  ```
+  > *NOTE* Please provide path to your Unity executable when prompted. Unity license is required. In case your Unity license has expired, the `create_unity_package.ps1` won't throw any errors but `Ros2ForUnity.unitypackage` won't be generated too.
 
 ## Build troubleshooting
 
@@ -59,7 +76,7 @@ Please execute `Set-ExecutionPolicy Bypass -Scope Process` in PS shell session t
 >     [4.469s]   C:/dev/ros2_foxy/share/rosidl_cmake/cmake/rosidl_generate_interfaces.cmake:286 (ament_execute_extensions)
 >     [4.484s]   CMakeLists.txt:16 (rosidl_generate_interfaces)
 Please reinstall `numpy` package from python by typing:
-```bash
+```powershell
 pip uninstall numpy
 pip install numpy
 ```
