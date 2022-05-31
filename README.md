@@ -13,10 +13,9 @@ Advantages of this module include:
 ## Platforms
 
 Supported OSes:
+- Ubuntu 22.04 (bash)
 - Ubuntu 20.04 (bash)
 - Windows 10 (powershell)
-
-> **Notice:** Currently, ros2 humble is only supported on Ubuntu 20.04. You have to build it from sources since it is not available in `apt`.
 
 Supported ROS2 distributions:
 - Foxy
@@ -30,7 +29,7 @@ Older versions of Unity3d may work, but the editor executable most probably won'
 
 This asset can be prepared in two flavours:
 
-- standalone mode, where no ROS2 installation required on target machine, e.g. your Unity3D simulation server. All required dependencies are installed and can be used e.g. as a complete set of Unity3D plugins.
+- standalone mode, where no ROS2 installation is required on target machine, e.g., your Unity3D simulation server. All required dependencies are installed and can be used e.g. as a complete set of Unity3D plugins.
 - overlay mode, where the ROS2 installation is required on target machine. Only asset libraries and generated messages are installed therefore ROS2 instance must be sourced.
 
 ## Releases
@@ -51,7 +50,7 @@ Please see OS-specific instructions:
 ## Custom messages
 
 Custom messages can be included in the build by either:
-* list them in `ros2_for_unity_custom_messages.repos` file, or
+* listing them in `ros2_for_unity_custom_messages.repos` file, or
 * manually inserting them in `src/ros2cs` directory. If the folder doesn't exist, you must pull repositories first (see building steps for each OS).
 
 ## Installation
