@@ -44,8 +44,8 @@ You can download pre-built [releases](https://github.com/RobotecAI/ros2-for-unit
 It has its own README and scripting, but for building the Unity Asset, please use instructions and scripting in this document instead, unless you also wish to run tests or examples for `ros2cs`.
 
 Please see OS-specific instructions:
-- [Instructions for Ubuntu 20.04](README-UBUNTU.md)
-- [Instructions for Windows 10](README-WINDOWS.md)
+- [Instructions for Ubuntu](README-UBUNTU.md)
+- [Instructions for Windows](README-WINDOWS.md)
 
 ## Custom messages
 

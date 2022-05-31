@@ -1,6 +1,6 @@
-# ROS2 For Unity - Ubuntu 20.04
+# ROS2 For Unity - Ubuntu 20.04 and 22.04
 
-This readme contains information specific to Ubuntu 20.04. For general information, please see [README.md](README.md)
+This readme contains information specific to Ubuntu 20.04/22.04. For general information, please see [README.md](README.md)
 
 ## Building
 
