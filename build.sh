@@ -32,6 +32,10 @@ while [[ $# -gt 0 ]]; do
       shift # past argument
       ;;
     -s|--standalone)
+      if ! hash patchelf 2>/dev/null ; then
+        echo "Patchelf missing. Standalone build requires patchelf. Install it via apt 'sudo apt install patchelf'."
+        exit 1
+      fi
       OPTIONS="$OPTIONS --standalone"
       STANDALONE=1
       shift # past argument
