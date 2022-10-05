@@ -2,11 +2,11 @@
 # NOTE: use the following format
 
 repositories:
-#  src/ros2cs/custom_messages/<package_name>:
+#  src/ros2cs/src/ros2/<package_name>:
 #    type: git
 #    url: <repo_url>
 #    version: <repo_branch>
-#  custom_messages/<package2_name>:
+#  src/ros2cs/src/ros2/<package2_name>:
 #    ...
 #    ...
 
