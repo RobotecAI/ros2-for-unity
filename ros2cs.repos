@@ -2,4 +2,4 @@ repositories:
   src/ros2cs/:
     type: git
     url:     https://github.com/RobotecAI/ros2cs.git
-    version: 1.2.0
+    version: 1.2.1
