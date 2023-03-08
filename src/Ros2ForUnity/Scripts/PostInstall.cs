@@ -40,7 +40,7 @@ internal class PostInstall : IPostprocessBuildWithReport
         var execFilename = Path.GetFileNameWithoutExtension(report.summary.outputPath);
         FileUtil.CopyFileOrDirectory(
             r2fuMeta, outputDir + "/" + execFilename + "_Data/" + r2fuMetadataName);
-        if (ROS2ForUnity.GetOS() == ROS2ForUnity.Platform.Linux) {
+        if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.StandaloneLinux64) {
             FileUtil.CopyFileOrDirectory(
                 r2csMeta, outputDir + "/" + execFilename + "_Data/Plugins/" + r2csMetadataName);
         } else {
