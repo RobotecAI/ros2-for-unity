@@ -16,9 +16,12 @@ Supported OSes:
 - Ubuntu 22.04 (bash)
 - Ubuntu 20.04 (bash)
 - Windows 10 (powershell)
+- Windows 11* (powershel)
+
+> \* ROS2 Galactic and Humble support only Windows 10 ([ROS 2 Windows system requirements](https://docs.ros.org/en/humble/Installation/Windows-Install-Binary.html#system-requirements)), but it is proven that it also works fine on Windows 11.
+
 
 Supported ROS2 distributions:
-- Foxy
 - Galactic
 - Humble
 
