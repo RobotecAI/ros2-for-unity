@@ -130,13 +130,66 @@ otherwise
     }
     ```
 
+**Creating a service**
+
+1. Create service body:
+    ```c#
+    public example_interfaces.srv.AddTwoInts_Response addTwoInts( example_interfaces.srv.AddTwoInts_Request msg)
+    {
+        example_interfaces.srv.AddTwoInts_Response response = new example_interfaces.srv.AddTwoInts_Response();
+        response.Sum = msg.A + msg.B;
+        return response;
+    }
+    ```
+
+1. Create a service with a service name and callback:
+    ```c#
+    IService<example_interfaces.srv.AddTwoInts_Request, example_interfaces.srv.AddTwoInts_Response> service = 
+        ros2Node.CreateService<example_interfaces.srv.AddTwoInts_Request, example_interfaces.srv.AddTwoInts_Response>(
+            "add_two_ints", addTwoInts);
+    ```
+
+**Calling a service**
+
+1. Create a client:
+    ```c#
+    private IClient<example_interfaces.srv.AddTwoInts_Request, example_interfaces.srv.AddTwoInts_Response> addTwoIntsClient;
+    ...
+    addTwoIntsClient = ros2Node.CreateClient<example_interfaces.srv.AddTwoInts_Request, example_interfaces.srv.AddTwoInts_Response>(
+        "add_two_ints");
+    ```
+
+1. Create a request and call a service:
+    ```c#
+    example_interfaces.srv.AddTwoInts_Request request = new example_interfaces.srv.AddTwoInts_Request();
+    request.A = 1;
+    request.B = 2;
+    var response = addTwoIntsClient.Call(request);
+    ```
+
+1. You can also make an async call:
+    ```c#
+    Task<example_interfaces.srv.AddTwoInts_Response> asyncTask = addTwoIntsClient.CallAsync(request);
+    ...
+    asyncTask.ContinueWith((task) => { Debug.Log("Got answer " + task.Result.Sum); });
+    ```
 ### Examples
 
 1. Create a top-level object containing `ROS2UnityComponent.cs`. This is the central `Monobehavior` for `Ros2ForUnity` that manages all the nodes. Refer to class documentation for details.
+    > **Note:** Each example script looks for `ROS2UnityComponent` in its own game object. However, this is not a requirement, just example implementation.
+
+**Topics**
 1. Add `ROS2TalkerExample.cs` script to the very same game object.
 1. Add `ROS2ListenerExample.cs` script to the very same game object.
-    > **Note:** Each example script looks for `ROS2UnityComponent` in its own game object. However, this is not a requirement, just example implementation.
-1. Once you start the project in Unity, you should be able to see two nodes talking with each other in  Unity Editor's console or use `ros2 node list` and `ros2 topic echo /chatter` to verify ros2 communication.
+
+Once you start the project in Unity, you should be able to see two nodes talking with each other in  Unity Editor's console or use `ros2 node list` and `ros2 topic echo /chatter` to verify ros2 communication.
+
+**Services**
+1. Add `ROS2ServiceExample.cs` script to the very same game object.
+1. Add `ROS2ClientExample.cs` script to the very same game object.
+
+Once you start the project in Unity, you should be able to see client node calling an example service.
+
 ## Acknowledgements 
 
 Open-source release of ROS2 For Unity was made possible through cooperation with [Tier IV](https://tier4.jp). Thanks to encouragement, support and requirements driven by Tier IV the project was significantly improved in terms of portability, stability, core structure and user-friendliness.
