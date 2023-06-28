@@ -15,6 +15,8 @@ shopt -s dotglob
 mkdir -p /workdir/ros2-for-unity
 mv /workdir/.ros2-for-unity/* /workdir/ros2-for-unity
 cd /workdir/ros2-for-unity/ && ./pull_repositories.sh
+mkdir -p /home/$(whoami)
+git config --global --add safe.directory /workdir/ros2-for-unity
 shopt -u dotglob
 
 ln -s /workdir/custom_messages /workdir/ros2-for-unity/src/ros2cs/src/custom_messages
