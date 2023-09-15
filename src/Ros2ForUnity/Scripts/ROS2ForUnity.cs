@@ -86,12 +86,22 @@ internal class ROS2ForUnity
     public static string GetRos2ForUnityPath()
     {
         char separator = Path.DirectorySeparatorChar;
-        string appDataPath = Application.dataPath;
-        string pluginPath = appDataPath;
+        string pluginPath = "";
 
-        if (InEditor()) {
-            pluginPath += separator + ros2ForUnityAssetFolderName;
+        var assetGUIs = AssetDatabase.FindAssets("t:Folder Ros2ForUnity");
+        if (assetGUIs.Length == 1)
+        {
+            pluginPath = AssetDatabase.GUIDToAssetPath(assetGUIs[0]);
         }
+        else
+        {
+            pluginPath = Application.dataPath;
+            if (InEditor())
+            {
+                pluginPath += separator + ros2ForUnityAssetFolderName;
+            }
+        }
+
         return pluginPath; 
     }
 
