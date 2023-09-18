@@ -1,0 +1,15 @@
+{
+    "name": "com.robotecai.ros2-for-unity",
+    "version": "1.3.0",
+    "displayName": "ROS2 For Unity",
+    "description": "Integration of ROS2 with Unity",
+    "unity": "2022.3",
+    "unityRelease": "5f1",
+    "documentationUrl": "https://github.com/RobotecAI/ros2-for-unity/",
+    "licensesUrl": "https://github.com/RobotecAI/ros2-for-unity/blob/develop/LICENSE.AL2",
+    "author": {
+      "name": "RobotecAI",
+      "email": "office@robotec.ai",
+      "url": "http://www.robotec.ai/"
+    }
+}

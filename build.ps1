@@ -43,18 +43,17 @@ if($standalone) {
 
 & "$scriptPath\src\ros2cs\build.ps1" @options
 if($?) {
-    md -Force $scriptPath\install\asset | Out-Null
-    Copy-Item -Path $scriptPath\src\Ros2ForUnity -Destination $scriptPath\install\asset\ -Recurse -Force
+    md -Force $scriptPath\install\package | Out-Null
+    Copy-Item -Path $scriptPath\src\Ros2ForUnity -Destination $scriptPath\install\package\ -Recurse -Force
     
-    $plugin_path=Join-Path -Path $scriptPath -ChildPath "\install\asset\Ros2ForUnity\Plugins\"
+    $plugin_path=Join-Path -Path $scriptPath -ChildPath "\install\package\Ros2ForUnity\Runtime\Plugins\"
     Write-Host "Deploying build to $plugin_path" -ForegroundColor Green
     & "$scriptPath\deploy_unity_plugins.ps1" $plugin_path
 
-    Copy-Item -Path $scriptPath\src\Ros2ForUnity\metadata_ros2cs.xml -Destination $scriptPath\install\asset\Ros2ForUnity\Plugins\Windows\x86_64\
-    Copy-Item -Path $scriptPath\src\Ros2ForUnity\metadata_ros2cs.xml -Destination $scriptPath\install\asset\Ros2ForUnity\Plugins\
+    Copy-Item -Path $scriptPath\src\Ros2ForUnity\Runtime\metadata_ros2cs.xml -Destination $scriptPath\install\package\Ros2ForUnity\Runtime\Plugins\Windows\x86_64\
+    Copy-Item -Path $scriptPath\src\Ros2ForUnity\Runtime\metadata_ros2cs.xml -Destination $scriptPath\install\package\Ros2ForUnity\Runtime\Plugins\
+    Copy-Item -Path $scriptPath\README.md -Destination $scriptPath\install\package\Ros2ForUnity\
 } else {
     Write-Host "Ros2cs build failed!" -ForegroundColor Red
     exit 1
 }
-
-

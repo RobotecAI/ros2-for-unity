@@ -39,7 +39,7 @@ def get_ros2_for_unity_root_path() -> pathlib.Path:
     return pathlib.Path(__file__).parents[2]
 
 def get_ros2_for_unity_path() -> pathlib.Path:
-    return pathlib.Path(__file__).parents[1].joinpath("Ros2ForUnity")
+    return pathlib.Path(__file__).parents[1].joinpath("Ros2ForUnity").joinpath("Runtime")
 
 def get_ros2cs_path() -> pathlib.Path:
     return pathlib.Path(__file__).parents[1].joinpath("ros2cs")
