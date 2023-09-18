@@ -29,6 +29,8 @@ internal class ROS2ForUnity
 {
     private static bool isInitialized = false;
     private static string ros2ForUnityAssetFolderName = "Ros2ForUnity";
+    public readonly static string rootPath; // Full path to `Runtime/`
+    public readonly static string pluginPath; // Full path to `Runtime/Plugins/[Platform]/`
     private XmlDocument ros2csMetadata = new XmlDocument();
     private XmlDocument ros2ForUnityMetadata = new XmlDocument();
 
@@ -70,54 +72,17 @@ internal class ROS2ForUnity
     
     private string GetEnvPathVariableName()
     {
-      string envVariable = "LD_LIBRARY_PATH";
       if (GetOS() == Platform.Windows)
       {
-          envVariable = "PATH";
+          return "PATH";
       }
-      return envVariable;
+
+      return "LD_LIBRARY_PATH";
     }
 
     private string GetEnvPathVariableValue()
     {
         return Environment.GetEnvironmentVariable(GetEnvPathVariableName());
-    }
-
-    public static string GetRos2ForUnityPath()
-    {
-        char separator = Path.DirectorySeparatorChar;
-        string appDataPath = Application.dataPath;
-        string pluginPath = appDataPath;
-
-        if (InEditor()) {
-            pluginPath += separator + ros2ForUnityAssetFolderName;
-        }
-        return pluginPath; 
-    }
-
-    public static string GetPluginPath()
-    {
-        char separator = Path.DirectorySeparatorChar;
-        string ros2ForUnityPath = GetRos2ForUnityPath();
-        string pluginPath = ros2ForUnityPath;
-        
-        pluginPath += separator + "Plugins";
-        
-        if (InEditor()) {
-            pluginPath += separator + GetOSName();
-        }
-
-        if (InEditor() || GetOS() == Platform.Windows)
-        {
-           pluginPath += separator + "x86_64";
-        }
-        
-        if (GetOS() == Platform.Windows)
-        {
-           pluginPath = pluginPath.Replace("/", "\\");
-        }
-
-        return pluginPath;
     }
 
     /// <summary>
@@ -132,13 +97,8 @@ internal class ROS2ForUnity
     private void SetEnvPathVariable()
     {
         string currentPath = GetEnvPathVariableValue();
-        string pluginPath = GetPluginPath();
         
-        char envPathSep = ':';
-        if (GetOS() == Platform.Windows)
-        {
-            envPathSep = ';';
-        }
+        char envPathSep = (GetOS() == Platform.Windows) ? ';' : ':';
 
         Environment.SetEnvironmentVariable(GetEnvPathVariableName(), pluginPath + envPathSep + currentPath);
     }
@@ -263,11 +223,14 @@ internal class ROS2ForUnity
 
     private void LoadMetadata() 
     {
-        char separator = Path.DirectorySeparatorChar;
         try
         {
-            ros2csMetadata.Load(GetPluginPath() + separator + "metadata_ros2cs.xml");
-            ros2ForUnityMetadata.Load(GetRos2ForUnityPath() + separator + "metadata_ros2_for_unity.xml");
+            ros2csMetadata.Load(
+                Path.Combine(pluginPath, "metadata_ros2cs.xml")
+            );
+            ros2ForUnityMetadata.Load(
+                Path.Combine(rootPath, "metadata_ros2_for_unity.xml")
+            );
         }
         catch (System.IO.FileNotFoundException)
         {
@@ -281,6 +244,28 @@ internal class ROS2ForUnity
 #endif
         }
     }
+
+        /// <summary>
+        /// Static constructor (mostly for paths)
+        /// </summary>
+        static ROS2ForUnity()
+        {
+            // Make paths:
+
+            rootPath = Path.GetFullPath("Packages/com.robotecai.ros2-for-unity/Runtime");
+
+            pluginPath = Path.Combine(rootPath, "Plugins");
+
+            if (InEditor())
+            {
+                pluginPath = Path.Combine(pluginPath, GetOSName());
+            }
+
+            if (InEditor() || GetOS() == Platform.Windows)
+            {
+                pluginPath = Path.Combine(pluginPath, "x86_64");
+            }
+        }
 
     internal ROS2ForUnity()
     {
@@ -299,7 +284,7 @@ internal class ROS2ForUnity
             SetEnvPathVariable();
         } else {
             // For foxy, it is necessary to use modified version of librcpputils to resolve custom msgs packages.
-            ROS2.GlobalVariables.absolutePath = GetPluginPath() + "/";
+            ROS2.GlobalVariables.absolutePath = pluginPath + Path.PathSeparator;
             if (currentRos2Version == "foxy") {
                 ROS2.GlobalVariables.preloadLibrary = true;
                 ROS2.GlobalVariables.preloadLibraryName = "librcpputils.so";

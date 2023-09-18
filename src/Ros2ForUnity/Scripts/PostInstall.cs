@@ -33,20 +33,24 @@ internal class PostInstall : IPostprocessBuildWithReport
         var r2fuMetadataName = "metadata_ros2_for_unity.xml";
         var r2csMetadataName = "metadata_ros2cs.xml";
 
-        // FileUtil.CopyFileOrDirectory: All file separators should be forward ones "/".
-        var r2fuMeta = ROS2ForUnity.GetRos2ForUnityPath() + "/" + r2fuMetadataName; 
-        var r2csMeta = ROS2ForUnity.GetPluginPath() + "/" + r2csMetadataName;
-        var outputDir = Directory.GetParent(report.summary.outputPath);
+        var r2fuMeta = Path.Combine(ROS2ForUnity.rootPath, r2fuMetadataName);
+        var r2csMeta = Path.Combine(ROS2ForUnity.pluginPath, r2csMetadataName);
+
+        var outputDir = Directory.GetParent(report.summary.outputPath).ToString();
         var execFilename = Path.GetFileNameWithoutExtension(report.summary.outputPath);
+
         FileUtil.CopyFileOrDirectory(
-            r2fuMeta, outputDir + "/" + execFilename + "_Data/" + r2fuMetadataName);
+            r2fuMeta, Path.Combine(outputDir, execFilename + "_Data", r2fuMetadataName)
+        );
+
+        string r2csMetaTarget;
         if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.StandaloneLinux64) {
-            FileUtil.CopyFileOrDirectory(
-                r2csMeta, outputDir + "/" + execFilename + "_Data/Plugins/" + r2csMetadataName);
+            r2csMetaTarget = Path.Combine(outputDir, execFilename + "_Data", "Plugins", r2csMetadataName);
         } else {
-            FileUtil.CopyFileOrDirectory(
-                r2csMeta, outputDir + "/" + execFilename + "_Data/Plugins/x86_64/" + r2csMetadataName);
+            r2csMetaTarget = Path.Combine(outputDir, execFilename + "_Data", "Plugins", "x86_64", r2csMetadataName);
         }
+
+        FileUtil.CopyFileOrDirectory(r2csMeta, r2csMetaTarget);
     }
 
 }
