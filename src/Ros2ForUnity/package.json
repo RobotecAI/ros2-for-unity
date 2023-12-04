@@ -9,5 +9,17 @@
 		"name": "Robotec.ai",
 		"email": "office@robotec.ai",
 		"url": "http://www.robotec.ai/"
-	}
+	},
+	"samples": [
+		{
+			"displayName": "Publisher and Subscriptions",
+			"description": "Example on how to use Publishers and Subscriptions",
+			"path": "Samples~/Publishers and Subscriptions"
+		},
+		{
+			"displayName": "Clients and Services",
+			"description": "Example on how to use Clients and Services",
+			"path": "Samples~/Clients and Services"
+		}
+	]
 }
