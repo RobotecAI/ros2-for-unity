@@ -1,0 +1,13 @@
+{
+	"name": "ai.robotec.ros2-for-unity",
+	"version": "1.3.0",
+	"displayName": "Ros2ForUnity",
+	"description": "Bindings for ROS 2",
+	"unity": "2020.1",
+	"license": "Apache License 2.0",
+	"author": {
+		"name": "Robotec.ai",
+		"email": "office@robotec.ai",
+		"url": "http://www.robotec.ai/"
+	}
+}
