@@ -195,4 +195,4 @@ Once you start the project in Unity, you should be able to see client node calli
 
 ## Acknowledgements 
 
-Open-source release of ROS2 For Unity was made possible through cooperation with [Tier IV](https://tier4.jp). Thanks to encouragement, support and requirements driven by Tier IV the project was significantly improved in terms of portability, stability, core structure and user-friendliness.
+Open-source release of ROS2 For Unity was made possible through cooperation with [TIER IV](https://tier4.jp). Thanks to encouragement, support and requirements driven by TIER IV the project was significantly improved in terms of portability, stability, core structure and user-friendliness.
