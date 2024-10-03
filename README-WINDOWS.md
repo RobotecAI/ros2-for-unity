@@ -42,12 +42,7 @@ It is necessary to complete all the steps for `ros2cs` [Prerequisites](https://g
     ./build.ps1
     ```
   * You can build with `-clean_install` to make sure your installation directory is cleaned before deploying.
-* Unity Asset is ready to import into your Unity project. You can find it in `install/asset/` directory.
-* (optionally) To create `.unitypackage` in `install/unity_package`
-  ```powershell
-  create_unity_package.ps1
-  ```
-  > *NOTE* Please provide path to your Unity executable when prompted. Unity license is required. In case your Unity license has expired, the `create_unity_package.ps1` won't throw any errors but `Ros2ForUnity.unitypackage` won't be generated too.
+* Unity package is ready to import into your Unity project. You can find it in `install/package/` directory.
 
 ## Build troubleshooting
 
@@ -85,9 +80,7 @@ pip install numpy
 
 ## OS-Specific usage remarks
 
-> If the Asset is built with `-standalone` flag (the default), then nothing extra needs to be done.
+> If the package is built with `-standalone` flag (the default), then nothing extra needs to be done.
 Otherwise, you have to source your ros distribution before launching either Unity3D Editor or Application.
 
-> Note that after you build the Asset, you can use it on a machine that has no ros2 installation (if built with `-standalone`).
-
-> You can simply copy over the `Ros2ForUnity` subdirectory to update your Asset.
+> Note that after you build the package, you can use it on a machine that has no ros2 installation (if built with `-standalone`).

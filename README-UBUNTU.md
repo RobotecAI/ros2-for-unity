@@ -40,12 +40,7 @@ Start with installation of dependencies. Make sure to complete each step of `ros
     ./build.sh
     ```
     * You can add `--clean-install` flag to make sure your installation directory is cleaned before deploying.
-* Unity Asset is ready to import into your Unity project. You can find it in `install/asset/` directory.
-* (optionally) To create `.unitypackage` in `install/unity_package`
-    ```bash
-    create_unity_package.sh -u <your-path-to-unity-editor-executable>
-    ```
-    > *NOTE* Unity license is required. 
+* Unity package is ready to import into your Unity project. You can find it in `install/package/` directory.
 
 ## OS-Specific usage remarks
 
