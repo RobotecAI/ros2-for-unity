@@ -18,20 +18,24 @@ Advantages of this module include:
 ## Platforms
 
 Supported OSes:
+- Ubuntu 24.04 (bash)
 - Ubuntu 22.04 (bash)
 - Ubuntu 20.04 (bash)
-- Windows 10 (powershell)
-- Windows 11* (powershel)
+- Windows 10* (powershell)
+- Windows 11* (powershell)
 
 > \* ROS2 Galactic and Humble support only Windows 10 ([ROS 2 Windows system requirements](https://docs.ros.org/en/humble/Installation/Windows-Install-Binary.html#system-requirements)), but it is proven that it also works fine on Windows 11.
 
 
 Supported ROS2 distributions:
-- Galactic
+- Jazzy
 - Humble
+- Galactic
+- Foxy
 
 Supported Unity3d:
 - 2020+
+- 6000+
 
 Older versions of Unity3d may work, but the editor executable most probably won't be detected properly by deployment script. This would require user confirmation for using unsupported version.
 
