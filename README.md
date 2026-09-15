@@ -28,7 +28,7 @@ Supported OSes:
 
 
 Supported ROS2 distributions:
-- Lyrical (source adaptation; see [build instructions and validation status](README-LYRICAL.md))
+- Lyrical (Linux build and adapter checks; see [build instructions and validation status](README-LYRICAL.md))
 - Jazzy
 - Humble
 - Galactic

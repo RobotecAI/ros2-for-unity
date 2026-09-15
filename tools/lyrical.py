@@ -24,7 +24,8 @@ def run(args, cwd=None, capture=False):
                           stdout=subprocess.PIPE if capture else None).stdout
 
 
-def load_binding(root=ROOT):
+def load_binding(root=None):
+    root = ROOT if root is None else root
     path = root / "src/ros2cs/tools/lyrical.py"
     if not path.is_file():
         raise RuntimeError("Adapted ros2cs is missing. Run pull_repositories.sh/.ps1 first.")
@@ -59,7 +60,8 @@ def git_metadata(repository):
     def git(*args):
         return run(["git", *args], cwd=repository, capture=True).strip()
     return {"sha": git("rev-parse", "HEAD"), "desc": git("describe", "--tags", "--always"),
-            "date": git("show", "-s", "--format=%ci")}
+            "date": git("show", "-s", "--format=%ci"),
+            "dirty": str(bool(git("status", "--porcelain"))).lower()}
 
 
 def write_metadata(asset, standalone, rmw, os_name, unity_meta, binding_meta):
@@ -116,6 +118,12 @@ def deploy(binding, install, standalone, rmw):
             manifest = install / "standalone/runtime-manifest.json"
             if not manifest.is_file():
                 raise RuntimeError("Standalone runtime manifest is missing.")
+            # The Lyrical buffer registry queries the ament package index at
+            # node initialization, even when no custom buffer plugin is used.
+            resources = install / "standalone/share"
+            if not (resources / "ament_index/resource_index/packages/rosidl_buffer_backend").is_file():
+                raise RuntimeError("Standalone rosidl_buffer_backend resource is missing.")
+            shutil.copytree(resources, native / "share")
             shutil.copy2(manifest, native / manifest.name)
         write_metadata(asset, standalone, rmw, os_name, git_metadata(ROOT), git_metadata(ROOT / "src/ros2cs"))
         destination = install / "asset/Ros2ForUnity"
@@ -126,14 +134,13 @@ def deploy(binding, install, standalone, rmw):
     return destination
 
 
-def build(standalone=False, with_tests=False, clean_install=False, rmw=None):
+def build(standalone=False, with_tests=False, clean_install=False, rmw=None, cmake_generator=None):
     binding = load_binding()
     selected = binding.check_environment(rmw)
-    # --clean-install cleans only the deployable asset. It must not destroy a ROS
-    # underlay or conceal an incompatible build profile.
-    if clean_install and (ROOT / "install/asset").exists():
-        shutil.rmtree(ROOT / "install/asset")
-    install = binding.build(ROOT, standalone, with_tests, selected)
+    # Deployment always replaces the asset after successful staging. Retain the
+    # last usable asset on compilation, profile validation or packaging failure,
+    # including when --clean-install is supplied.
+    install = binding.build(ROOT, standalone, with_tests, selected, cmake_generator)
     asset = deploy(binding, install, standalone, selected)
     print("Unity asset: " + str(asset))
 
@@ -149,12 +156,13 @@ def main(argv=None):
     p.add_argument("--with-tests", "-t", action="store_true")
     p.add_argument("--clean-install", "-c", action="store_true")
     p.add_argument("--rmw", choices=RMWS)
+    p.add_argument("--cmake-generator", help="Explicit CMake generator, e.g. Ninja")
     args = parser.parse_args(argv)
     try:
         if args.command == "fetch":
             fetch(args.ros2cs_source, args.get_custom_messages)
         else:
-            build(args.standalone, args.with_tests, args.clean_install, args.rmw)
+            build(args.standalone, args.with_tests, args.clean_install, args.rmw, args.cmake_generator)
     except (RuntimeError, subprocess.CalledProcessError, OSError, ValueError) as exc:
         print("Lyrical Unity build failed: " + str(exc), file=sys.stderr)
         return 1

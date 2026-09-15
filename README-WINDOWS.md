@@ -2,6 +2,8 @@
 
 This readme contains information specific to Window 10. For general information, please see [README.md](README.md).
 
+For ROS 2 Lyrical on Windows 11 with .NET 10, use the [Lyrical build guide](README-LYRICAL.md).
+
 ## Building
 
 We assume that working directory is `C:\dev` and we are using `ROS2 galactic` (replace with `foxy`, `humble`, `jazzy` or `rolling` where applicable).

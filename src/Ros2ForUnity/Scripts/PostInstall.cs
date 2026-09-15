@@ -14,9 +14,7 @@
 
 #if UNITY_EDITOR
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEditor;
@@ -34,33 +32,46 @@ internal class PostInstall : IPostprocessBuildWithReport
     public int callbackOrder { get { return 0; } }
     public void OnPostprocessBuild(BuildReport report)
     {
-        var r2fuMetadataName = "metadata_ros2_for_unity.xml";
-        var r2csMetadataName = "metadata_ros2cs.xml";
+        var target = report.summary.platform;
+        if (target != BuildTarget.StandaloneLinux64 && target != BuildTarget.StandaloneWindows64)
+            throw new BuildFailedException("ROS2ForUnity supports x86_64 Linux and Windows Players only.");
 
-        // FileUtil.CopyFileOrDirectory: All file separators should be forward ones "/".
-        var r2fuMeta = ROS2ForUnity.GetRos2ForUnityPath() + "/" + r2fuMetadataName; 
-        var r2csMeta = ROS2ForUnity.GetPluginPath() + "/" + r2csMetadataName;
-        var outputDir = Directory.GetParent(report.summary.outputPath);
-        var execFilename = Path.GetFileNameWithoutExtension(report.summary.outputPath);
-        FileUtil.CopyFileOrDirectory(
-            r2fuMeta, outputDir + "/" + execFilename + "_Data/" + r2fuMetadataName);
-        if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.StandaloneLinux64) {
-            FileUtil.CopyFileOrDirectory(
-                r2csMeta, outputDir + "/" + execFilename + "_Data/Plugins/" + r2csMetadataName);
+        string osName = target == BuildTarget.StandaloneLinux64 ? "Linux" : "Windows";
+        string asset = ROS2ForUnity.GetRos2ForUnityPath();
+        string source = Path.Combine(asset, "Plugins", osName, "x86_64");
+        string data = Path.Combine(Path.GetDirectoryName(report.summary.outputPath),
+            Path.GetFileNameWithoutExtension(report.summary.outputPath) + "_Data");
+        string native = target == BuildTarget.StandaloneLinux64
+            ? Path.Combine(data, "Plugins") : Path.Combine(data, "Plugins", "x86_64");
+        Directory.CreateDirectory(native);
+        File.Copy(Path.Combine(asset, "metadata_ros2_for_unity.xml"),
+            Path.Combine(data, "metadata_ros2_for_unity.xml"), true);
+        File.Copy(Path.Combine(source, "metadata_ros2cs.xml"),
+            Path.Combine(native, "metadata_ros2cs.xml"), true);
 
-            // Copy versioned libraries (Unity skips them)
-            Regex soWithVersionReg = new Regex(@".*\.so(\.[0-9])+$");
-            var versionedLibs = new List<String>(Directory.GetFiles(ROS2ForUnity.GetPluginPath()))
-                                    .Where(path => soWithVersionReg.IsMatch(path))
-                                    .ToList();
-            foreach (var libPath in versionedLibs) {
-                FileUtil.CopyFileOrDirectory(
-                    libPath, outputDir + "/" + execFilename + "_Data/Plugins/" + Path.GetFileName(libPath));
-            }
-        } else {
-            FileUtil.CopyFileOrDirectory(
-                r2csMeta, outputDir + "/" + execFilename + "_Data/Plugins/x86_64/" + r2csMetadataName);
-        }
+        // Unity skips versioned ELF libraries, including multi-digit SONAMEs.
+        if (target == BuildTarget.StandaloneLinux64)
+            foreach (string library in Directory.GetFiles(source))
+                if (Regex.IsMatch(library, @"\.so(\.[0-9]+)+$"))
+                    File.Copy(library, Path.Combine(native, Path.GetFileName(library)), true);
+
+        // Non-plugin files are not automatically included in a Player build.
+        string share = Path.Combine(source, "share");
+        if (Directory.Exists(share))
+            CopyResources(share, Path.Combine(native, "share"));
+        string manifest = Path.Combine(source, "runtime-manifest.json");
+        if (File.Exists(manifest))
+            File.Copy(manifest, Path.Combine(native, "runtime-manifest.json"), true);
+    }
+
+    private static void CopyResources(string source, string destination)
+    {
+        Directory.CreateDirectory(destination);
+        foreach (string file in Directory.GetFiles(source))
+            if (!file.EndsWith(".meta", StringComparison.OrdinalIgnoreCase))
+                File.Copy(file, Path.Combine(destination, Path.GetFileName(file)), true);
+        foreach (string directory in Directory.GetDirectories(source))
+            CopyResources(directory, Path.Combine(destination, Path.GetFileName(directory)));
     }
 
 }

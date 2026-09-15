@@ -15,6 +15,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -29,7 +30,30 @@ namespace ROS2
 /// </summary>
 internal class ROS2ForUnity
 {
+    [DllImport("libc.so.6", EntryPoint = "setenv", SetLastError = true)]
+    private static extern int SetUnixEnvironment(string name, string value, int overwrite);
+
+    [DllImport("ucrtbase.dll", EntryPoint = "_putenv_s", CallingConvention = CallingConvention.Cdecl,
+        CharSet = CharSet.Ansi)]
+    private static extern int SetWindowsCEnvironment(string name, string value);
+
+    private static void SetRuntimeEnvironment(string name, string value)
+    {
+        // CoreCLR can cache its managed environment separately from libc;
+        // Windows ROS libraries read the shared C runtime environment as well.
+        // Synchronize both views before loading any ROS library.
+        int error = GetOS() == Platform.Windows
+            ? SetWindowsCEnvironment(name, value) : SetUnixEnvironment(name, value, 1);
+        if (error != 0)
+            throw new InvalidOperationException("Could not set native ROS environment variable: " + name);
+        Environment.SetEnvironmentVariable(name, value);
+    }
+
     private static bool isInitialized = false;
+    private bool ownsRuntime = false;
+#if ENABLE_MONO
+    private ConsoleCancelEventHandler cancelHandler;
+#endif
     private static string ros2ForUnityAssetFolderName = "Ros2ForUnity";
     private XmlDocument ros2csMetadata = new XmlDocument();
     private XmlDocument ros2ForUnityMetadata = new XmlDocument();
@@ -142,11 +166,26 @@ internal class ROS2ForUnity
             envPathSep = ';';
         }
 
-        Environment.SetEnvironmentVariable(GetEnvPathVariableName(), pluginPath + envPathSep + currentPath);
+        SetRuntimeEnvironment(GetEnvPathVariableName(), pluginPath + envPathSep + currentPath);
     }
 
     public bool IsStandalone() {
         return Convert.ToBoolean(Convert.ToInt16(GetMetadataValue(ros2csMetadata, "/ros2cs/standalone")));
+    }
+
+    private void SetRuntimeResourcePath()
+    {
+        if (!IsStandalone() || GetROSVersion() != "lyrical")
+            return;
+        string prefix = GetPluginPath();
+        string resource = Path.Combine(prefix, "share/ament_index/resource_index/packages/rosidl_buffer_backend");
+        if (!File.Exists(resource))
+            throw new InvalidDataException("Missing Lyrical runtime resource: " + resource);
+        string current = Environment.GetEnvironmentVariable("AMENT_PREFIX_PATH");
+        var prefixes = new List<string>((current ?? "").Split(Path.PathSeparator));
+        prefixes.RemoveAll(path => string.IsNullOrEmpty(path) || path == prefix);
+        prefixes.Insert(0, prefix);
+        SetRuntimeEnvironment("AMENT_PREFIX_PATH", string.Join(Path.PathSeparator.ToString(), prefixes));
     }
 
     public string GetROSVersion()
@@ -185,7 +224,7 @@ internal class ROS2ForUnity
             string packaged = rmwNode.InnerText.Trim();
             if (!string.IsNullOrEmpty(selected) && selected != packaged)
                 throw new InvalidOperationException("Requested RMW " + selected + " was not packaged; available=" + packaged);
-            Environment.SetEnvironmentVariable("RMW_IMPLEMENTATION", packaged);
+            SetRuntimeEnvironment("RMW_IMPLEMENTATION", packaged);
         }
     }
 
@@ -239,10 +278,11 @@ internal class ROS2ForUnity
     {
 #if ENABLE_MONO
         // Il2CPP build does not support Console.CancelKeyPress currently
-        Console.CancelKeyPress += (sender, eventArgs) => {
+        cancelHandler = (sender, eventArgs) => {
             eventArgs.Cancel = true;
             DestroyROS2ForUnity();
         };
+        Console.CancelKeyPress += cancelHandler;
 #endif
     }
 
@@ -295,6 +335,7 @@ internal class ROS2ForUnity
         // Self checks
         CheckROSSupport(currentRos2Version);
         CheckIntegrity();
+        SetRuntimeResourcePath();
 
         // Library loading
         // rcpputils uses this path for plugin lookup. On Linux the ELF RPATH,
@@ -313,6 +354,7 @@ internal class ROS2ForUnity
         // Initialize
         ConnectLoggers();
         Ros2cs.Init();
+        ownsRuntime = true;
         RegisterCtrlCHandler();
 
         string rmwImpl = Ros2cs.GetRMWImplementation();
@@ -340,7 +382,7 @@ internal class ROS2ForUnity
     /// <returns>The state of ROS2 module. Should be checked before attempting to create or use pubs/subs</returns>
     public bool Ok()
     {
-        if (!isInitialized)
+        if (!ownsRuntime || !isInitialized)
         {
             return false;
         }
@@ -349,6 +391,22 @@ internal class ROS2ForUnity
 
     internal void DestroyROS2ForUnity()
     {
+        // A previous Play session's finalizer or callback must not shut down a
+        // newly initialized runtime. Detach callbacks when this owner stops.
+        if (!ownsRuntime)
+            return;
+        ownsRuntime = false;
+#if UNITY_EDITOR
+        EditorApplication.playModeStateChanged -= this.EditorPlayStateChanged;
+        EditorApplication.quitting -= this.DestroyROS2ForUnity;
+#endif
+#if ENABLE_MONO
+        if (cancelHandler != null)
+        {
+            Console.CancelKeyPress -= cancelHandler;
+            cancelHandler = null;
+        }
+#endif
         if (isInitialized)
         {
             Debug.Log("Shutting down Ros2 For Unity");

@@ -2,6 +2,8 @@
 
 This readme contains information specific to Ubuntu 20.04/22.04. For general information, please see [README.md](README.md)
 
+For ROS 2 Lyrical on Ubuntu 26.04, use the [Lyrical build guide](README-LYRICAL.md).
+
 ## Building
 
 We assume that working directory is `~/ros2-for-unity` and we are using `ROS2 galactic` (replace with `foxy`, `humble`, `jazzy` or `rolling` where applicable).
