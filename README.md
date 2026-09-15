@@ -28,6 +28,7 @@ Supported OSes:
 
 
 Supported ROS2 distributions:
+- Lyrical (source adaptation; see [build instructions and validation status](README-LYRICAL.md))
 - Jazzy
 - Humble
 - Galactic
@@ -56,6 +57,7 @@ You can download pre-built [releases](https://github.com/RobotecAI/ros2-for-unit
 It has its own README and scripting, but for building the Unity Asset, please use instructions and scripting in this document instead, unless you also wish to run tests or examples for `ros2cs`.
 
 Please see OS-specific instructions:
+- [Instructions for ROS 2 Lyrical (Linux and Windows)](README-LYRICAL.md)
 - [Instructions for Ubuntu](README-UBUNTU.md)
 - [Instructions for Windows](README-WINDOWS.md)
 

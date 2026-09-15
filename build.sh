@@ -1,4 +1,10 @@
 #!/bin/bash
+
+# Lyrical uses the checked, cross-platform build driver.
+if [ "${ROS_DISTRO:-}" = "lyrical" ]; then
+  SCRIPT_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+  exec python3 "$SCRIPT_ROOT/tools/lyrical.py" build "$@"
+fi
 SCRIPT=$(readlink -f $0)
 SCRIPTPATH=`dirname $SCRIPT`
 

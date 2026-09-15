@@ -17,6 +17,16 @@ Param (
     [Parameter(Mandatory=$false)][switch]$clean_install=$false
 )
 
+if ($Env:ROS_DISTRO -eq "lyrical") {
+    $driverArgs = @("build")
+    if ($with_tests) { $driverArgs += "--with-tests" }
+    if ($standalone) { $driverArgs += "--standalone" }
+    if ($clean_install) { $driverArgs += "--clean-install" }
+    & python (Join-Path $PSScriptRoot "tools/lyrical.py") @driverArgs
+    exit $LASTEXITCODE
+}
+
+
 $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
 
 if(-Not (Test-Path -Path "$scriptPath\src\ros2cs")) {
