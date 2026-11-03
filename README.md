@@ -18,20 +18,25 @@ Advantages of this module include:
 ## Platforms
 
 Supported OSes:
+- Ubuntu 24.04 (bash)
 - Ubuntu 22.04 (bash)
 - Ubuntu 20.04 (bash)
-- Windows 10 (powershell)
-- Windows 11* (powershel)
+- Windows 10* (powershell)
+- Windows 11* (powershell)
 
 > \* ROS2 Galactic and Humble support only Windows 10 ([ROS 2 Windows system requirements](https://docs.ros.org/en/humble/Installation/Windows-Install-Binary.html#system-requirements)), but it is proven that it also works fine on Windows 11.
 
 
 Supported ROS2 distributions:
-- Galactic
+- Lyrical (Linux build and adapter checks; see [build instructions and validation status](README-LYRICAL.md))
+- Jazzy
 - Humble
+- Galactic
+- Foxy
 
 Supported Unity3d:
 - 2020+
+- 6000+
 
 Older versions of Unity3d may work, but the editor executable most probably won't be detected properly by deployment script. This would require user confirmation for using unsupported version.
 
@@ -52,6 +57,7 @@ You can download pre-built [releases](https://github.com/RobotecAI/ros2-for-unit
 It has its own README and scripting, but for building the Unity Asset, please use instructions and scripting in this document instead, unless you also wish to run tests or examples for `ros2cs`.
 
 Please see OS-specific instructions:
+- [Instructions for ROS 2 Lyrical (Linux and Windows)](README-LYRICAL.md)
 - [Instructions for Ubuntu](README-UBUNTU.md)
 - [Instructions for Windows](README-WINDOWS.md)
 

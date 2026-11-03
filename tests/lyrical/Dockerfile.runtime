@@ -1,0 +1,5 @@
+# Acceptance only: no ROS installation, SDK or build workspace.
+FROM ubuntu:26.04
+RUN apt-get update && apt-get install -y --no-install-recommends dotnet-runtime-10.0 \
+    && rm -rf /var/lib/apt/lists/*
+ENTRYPOINT ["dotnet"]

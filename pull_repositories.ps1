@@ -1,3 +1,8 @@
+if ($Env:ROS_DISTRO -eq "lyrical") {
+    & python (Join-Path $PSScriptRoot "tools/lyrical.py") fetch @args
+    exit $LASTEXITCODE
+}
+
 $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
 
 if (([string]::IsNullOrEmpty($Env:ROS_DISTRO)))

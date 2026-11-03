@@ -14,8 +14,22 @@
 Param (
     [Parameter(Mandatory=$false)][switch]$with_tests=$false,
     [Parameter(Mandatory=$false)][switch]$standalone=$false,
-    [Parameter(Mandatory=$false)][switch]$clean_install=$false
+    [Parameter(Mandatory=$false)][switch]$clean_install=$false,
+    [Parameter(Mandatory=$false)][string]$rmw,
+    [Parameter(Mandatory=$false)][string]$cmake_generator
 )
+
+if ($Env:ROS_DISTRO -eq "lyrical") {
+    $driverArgs = @("build")
+    if ($with_tests) { $driverArgs += "--with-tests" }
+    if ($standalone) { $driverArgs += "--standalone" }
+    if ($clean_install) { $driverArgs += "--clean-install" }
+    if ($rmw) { $driverArgs += @("--rmw", $rmw) }
+    if ($cmake_generator) { $driverArgs += @("--cmake-generator", $cmake_generator) }
+    & python (Join-Path $PSScriptRoot "tools/lyrical.py") @driverArgs
+    exit $LASTEXITCODE
+}
+
 
 $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
 
@@ -56,5 +70,4 @@ if($?) {
     Write-Host "Ros2cs build failed!" -ForegroundColor Red
     exit 1
 }
-
 
