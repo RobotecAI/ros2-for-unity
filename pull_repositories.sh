@@ -4,7 +4,7 @@ SCRIPT=$(readlink -f $0)
 SCRIPTPATH=`dirname $SCRIPT`
 
 if [ -z "${ROS_DISTRO}" ]; then
-    echo "Can't detect ROS2 version. Source your ros2 distro first. Foxy and Galactic are supported"
+    echo "Can't detect ROS2 version. Source your ros2 distro first. Foxy, Galactic, Humble, Jazzy are supported"
     exit 1
 fi
 

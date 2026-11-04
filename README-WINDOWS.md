@@ -4,7 +4,7 @@ This readme contains information specific to Window 10. For general information,
 
 ## Building
 
-We assume that working directory is `C:\dev` and we are using `ROS2 galactic` (replace with `foxy` or `humble` where applicable).
+We assume that working directory is `C:\dev` and we are using `ROS2 galactic` (replace with `foxy`, `humble`, `jazzy` or `rolling` where applicable).
 
 ### Prerequisites
 
