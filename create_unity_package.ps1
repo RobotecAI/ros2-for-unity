@@ -72,6 +72,8 @@ if(Test-Path -Path "$tmp_project_path") {
 # Copy asset
 Write-Host "Copying asset '$input_asset' to export..."
 Copy-Item -Path "$input_asset" -Destination "$tmp_project_path\Assets\$package_name" -Recurse
+# The licence, the notice and the third-party notices go into every package
+Copy-Item -Path "$scriptPath\LICENSE.AL2", "$scriptPath\NOTICE", "$scriptPath\THIRD_PARTY_NOTICES.md" -Destination "$tmp_project_path\Assets\$package_name" -ErrorAction Stop
 
 # Creating asset
 Write-Host "Saving unitypackage '$output_dir\$package_name.unitypackage'..."

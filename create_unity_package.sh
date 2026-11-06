@@ -100,6 +100,8 @@ fi
 # Copy asset
 echo "Copying asset to export..."
 cp -r "$INPUT_ASSET" "$TMP_PROJECT_PATH/Assets/$PACKAGE_NAME"
+# The licence, the notice and the third-party notices go into every package
+cp "$SCRIPTPATH/LICENSE.AL2" "$SCRIPTPATH/NOTICE" "$SCRIPTPATH/THIRD_PARTY_NOTICES.md" "$TMP_PROJECT_PATH/Assets/$PACKAGE_NAME/" || exit 1
 
 # Creating asset
 echo "Saving unitypackage '$OUTPUT_DIR/$PACKAGE_NAME.unitypackage'..."

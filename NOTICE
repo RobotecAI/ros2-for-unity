@@ -1,2 +1,4 @@
 ROS2 For Unity
 Copyright 2019-2026 Robotec.ai sp. z o.o.
+
+The standalone release packages include third-party components; see THIRD_PARTY_NOTICES.md.
